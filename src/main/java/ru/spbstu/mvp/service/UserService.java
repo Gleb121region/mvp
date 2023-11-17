@@ -19,31 +19,33 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
 
+    private static User getUser(UsernamePasswordAuthenticationToken connectedUser) {
+        return (User) connectedUser.getPrincipal();
+    }
+
     public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
-        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-        // check if the current password is correct
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+        User user = getUser((UsernamePasswordAuthenticationToken) connectedUser);
+
+        if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
             throw new IllegalStateException("Wrong password");
         }
-        // check if the two new passwords are the same
-        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
+
+        if (!request.newPassword().equals(request.confirmationPassword())) {
             throw new IllegalStateException("Password are not the same");
         }
 
-        // update the password
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
 
-        // save the new password
         repository.save(user);
     }
 
     public void changeInfoAboutUser(UserUpdateRequest request, Principal connectedUser) {
-        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        User user = getUser((UsernamePasswordAuthenticationToken) connectedUser);
         repository.updateUser(user.getId(), request);
     }
 
     public UserResponse getInfoAboutUser(Principal connectedUser) {
-        User currentUser = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        User currentUser = getUser((UsernamePasswordAuthenticationToken) connectedUser);
         return repository.findUserById(currentUser.getId()).map(user ->
                 UserResponse.builder()
                         .firstname(user.getFirstname())
@@ -55,5 +57,10 @@ public class UserService {
                         .linkVK(user.getLinkVK())
                         .email(user.getEmail())
                         .build()).orElse(null);
+    }
+
+    public void deleteUser(Principal connectedUser) {
+        User currentUser = getUser((UsernamePasswordAuthenticationToken) connectedUser);
+        repository.deleteUserById(currentUser.getId());
     }
 }

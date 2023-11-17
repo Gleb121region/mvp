@@ -18,11 +18,13 @@ public class FlatController {
     private final FlatService flatService;
 
     @GetMapping()
+    @ResponseBody
     public Set<FlatResponse> getFewFlats(@Param("request") FlatRequest request, @RequestParam(name = "limit") Integer limit, @RequestParam(name = "offset") Integer offset) {
         return flatService.getFlatsInfo(request, limit, offset);
     }
 
     @GetMapping("/{flatId}")
+    @ResponseBody
     public FlatWithDescriptionResponse getInfAboutFlat(@PathVariable Integer flatId) {
         return flatService.getFlatInfo(flatId);
     }

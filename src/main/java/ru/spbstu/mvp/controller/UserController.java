@@ -31,8 +31,15 @@ public class UserController {
     }
 
     @GetMapping
+    @ResponseBody
     public ResponseEntity<?> getUser(Principal connectedUser) {
         UserResponse userResponse = userService.getInfoAboutUser(connectedUser);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(Principal connectedUser) {
+        userService.deleteUser(connectedUser);
+        return ResponseEntity.ok().build();
     }
 }

@@ -32,10 +32,10 @@ public class AuthenticationService {
 
   public AuthenticationResponse register(RegisterRequest request) {
     var user = User.builder()
-        .firstname(request.getFirstname())
-        .email(request.getEmail())
-        .password(passwordEncoder.encode(request.getPassword()))
-        .role(request.getRole())
+        .firstname(request.firstname())
+        .email(request.email())
+        .password(passwordEncoder.encode(request.password()))
+        .role(request.role())
         .build();
     var savedUser = repository.save(user);
     var jwtToken = jwtService.generateToken(user);
@@ -50,11 +50,11 @@ public class AuthenticationService {
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
-            request.getEmail(),
-            request.getPassword()
+            request.email(),
+            request.password()
         )
     );
-    var user = repository.findByEmail(request.getEmail())
+    var user = repository.findByEmail(request.email())
         .orElseThrow();
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);

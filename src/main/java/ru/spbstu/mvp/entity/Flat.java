@@ -89,7 +89,7 @@ public class Flat {
     private Boolean isInternet;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flat", fetch = FetchType.EAGER)
-    private Set<Photo> photoLinks;
+    private Set<Photo> photos;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flat")
     private Set<Dear> dears;
