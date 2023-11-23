@@ -11,11 +11,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.spbstu.mvp.entity.Token;
-import ru.spbstu.mvp.entity.enums.TokenType;
 import ru.spbstu.mvp.entity.User;
+import ru.spbstu.mvp.entity.enums.TokenType;
 import ru.spbstu.mvp.repository.TokenRepository;
 import ru.spbstu.mvp.repository.UserRepository;
 import ru.spbstu.mvp.request.auth.AuthenticationRequest;
+import ru.spbstu.mvp.request.auth.ChangePasswordWithEmailRequest;
 import ru.spbstu.mvp.request.auth.RegisterRequest;
 import ru.spbstu.mvp.response.auth.AuthenticationResponse;
 
@@ -64,6 +65,26 @@ public class AuthenticationService {
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
         .build();
+  }
+
+  public AuthenticationResponse changePassword(ChangePasswordWithEmailRequest request) {
+    authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    request.email(),
+                    request.currentPassword()
+            )
+    );
+    var user = repository.findByEmail(request.email())
+            .orElseThrow();
+    repository.changeUserPassword(user.getId(), passwordEncoder.encode(request.newPassword()));
+    var jwtToken = jwtService.generateToken(user);
+    var refreshToken = jwtService.generateRefreshToken(user);
+    revokeAllUserTokens(user);
+    saveUserToken(user, jwtToken);
+    return AuthenticationResponse.builder()
+            .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .build();
   }
 
   private void saveUserToken(User user, String jwtToken) {

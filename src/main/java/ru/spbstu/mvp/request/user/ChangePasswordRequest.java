@@ -1,4 +1,4 @@
-package ru.spbstu.mvp.request.auth;
+package ru.spbstu.mvp.request.user;
 
 import lombok.Builder;
 

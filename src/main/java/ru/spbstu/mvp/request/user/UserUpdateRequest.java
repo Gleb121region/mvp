@@ -12,20 +12,18 @@ import java.util.Date;
 @Builder
 public record UserUpdateRequest(
         @Nullable
-        String firstName,
+        String firstname,
         @Nullable
-        String lastName,
+        String lastname,
         @Nullable
         String about,
         @Nullable
         Gender gender,
         @Nullable
-        Integer age,
-        @Nullable
-        Date birhdayDate,
+        Date birthdayDate,
         @Nullable
         @Size(max = 11)
-        String mobile,
+        String phone,
         @Nullable
         @Email
         String email,

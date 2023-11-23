@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.spbstu.mvp.entity.User;
 import ru.spbstu.mvp.repository.UserRepository;
-import ru.spbstu.mvp.request.auth.ChangePasswordRequest;
+import ru.spbstu.mvp.request.user.ChangePasswordRequest;
 import ru.spbstu.mvp.request.user.UserUpdateRequest;
 import ru.spbstu.mvp.response.user.UserResponse;
 
@@ -40,6 +40,7 @@ public class UserService {
     }
 
     public void changeInfoAboutUser(UserUpdateRequest request, Principal connectedUser) {
+        System.out.println(request.toString());
         User user = getUser((UsernamePasswordAuthenticationToken) connectedUser);
         repository.updateUser(user.getId(), request);
     }

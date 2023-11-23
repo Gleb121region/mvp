@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.spbstu.mvp.request.auth.ChangePasswordRequest;
+import ru.spbstu.mvp.request.user.ChangePasswordRequest;
 import ru.spbstu.mvp.request.user.UserUpdateRequest;
 import ru.spbstu.mvp.response.user.UserResponse;
 import ru.spbstu.mvp.service.UserService;
