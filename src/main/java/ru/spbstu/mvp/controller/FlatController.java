@@ -17,7 +17,7 @@ public class FlatController {
 
     private final FlatService flatService;
 
-    @GetMapping()
+    @GetMapping
     @ResponseBody
     public Set<FlatResponse> getFewFlats(@Param("request") FlatRequest request, @RequestParam(name = "limit") Integer limit, @RequestParam(name = "offset") Integer offset) {
         return flatService.getFlatsInfo(request, limit, offset);
