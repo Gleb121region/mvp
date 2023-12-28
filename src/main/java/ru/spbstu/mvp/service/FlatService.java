@@ -9,6 +9,7 @@ import ru.spbstu.mvp.entity.Flat;
 import ru.spbstu.mvp.entity.Photo;
 import ru.spbstu.mvp.repository.FlatRepository;
 import ru.spbstu.mvp.repository.PhotoRepository;
+import ru.spbstu.mvp.request.flat.CreateFlatRequest;
 import ru.spbstu.mvp.request.flat.FlatRequest;
 import ru.spbstu.mvp.response.flat.FlatResponse;
 import ru.spbstu.mvp.response.flat.FlatWithDescriptionResponse;
@@ -59,4 +60,12 @@ public class FlatService {
                                 .build()
         ).orElse(null);
     }
+
+    // todo: добавить endpoint который бы создавал объявление
+    public void createFlat(CreateFlatRequest request) {
+        return;
+    }
+
+    // todo: добавить шадулер который через месяц удалял бы объявление
+
 }
