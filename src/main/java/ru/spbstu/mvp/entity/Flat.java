@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.OffsetDateTime;
 import java.util.Set;
 
 @Data
@@ -87,6 +88,12 @@ public class Flat {
 
     @NotNull
     private Boolean isInternet;
+
+    @Column
+    private OffsetDateTime createdAt;
+
+    @Column
+    private OffsetDateTime updatedAt;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flat", fetch = FetchType.EAGER)
     private Set<Photo> photos;

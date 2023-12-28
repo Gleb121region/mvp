@@ -15,7 +15,8 @@ import ru.spbstu.mvp.entity.enums.TokenType;
 public class Token {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "token_id", nullable = false, updatable = false)
   public Integer id;
 
   @Column(unique = true)
