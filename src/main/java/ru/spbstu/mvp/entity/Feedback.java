@@ -25,10 +25,12 @@ public class Feedback {
     private FeedbackType feedbackType;
 
     @Column
-    private OffsetDateTime createdAt;
+    @Builder.Default
+    private OffsetDateTime createdAt = OffsetDateTime.now();
 
     @Column
-    private OffsetDateTime updatedAt;
+    @Builder.Default
+    private OffsetDateTime updatedAt = null;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;

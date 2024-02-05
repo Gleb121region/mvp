@@ -90,10 +90,12 @@ public class Flat {
     private Boolean isInternet;
 
     @Column
-    private OffsetDateTime createdAt;
+    @Builder.Default
+    private OffsetDateTime createdAt = OffsetDateTime.now();
 
     @Column
-    private OffsetDateTime updatedAt;
+    @Builder.Default
+    private OffsetDateTime updatedAt = null;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flat", fetch = FetchType.EAGER)
     private Set<Photo> photos;
