@@ -19,7 +19,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
 
-    private static User getUser(UsernamePasswordAuthenticationToken connectedUser) {
+    public static User getUser(UsernamePasswordAuthenticationToken connectedUser) {
         return (User) connectedUser.getPrincipal();
     }
 
