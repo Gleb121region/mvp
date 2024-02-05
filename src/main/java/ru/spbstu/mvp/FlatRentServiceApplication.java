@@ -13,16 +13,4 @@ public class FlatRentServiceApplication {
         SpringApplication.run(FlatRentServiceApplication.class, args);
     }
 
-//    @Bean
-//    public CommandLineRunner commandLineRunner(AuthenticationService service) {
-//        return args -> {
-//            var admin = RegisterRequest.builder()
-//                    .firstname("Gleb")
-//                    .email("popov.gleb.01@mail.ru")
-//                    .password("string")
-//                    .role(USER)
-//                    .build();
-//            System.out.println("Admin token: " + service.register(admin).getAccessToken());
-//        };
-//    }
 }
