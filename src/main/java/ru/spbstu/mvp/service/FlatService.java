@@ -108,7 +108,7 @@ public class FlatService {
                         .pricePerMonth(flat.getPricePerMonth())
                         .address(flat.getDistrict() + " " + flat.getStreet() + " " + flat.getHouseNumber())
                         .underground(flat.getUnderground())
-                        .photoUrls(photoRepository.findPhotosByFlat(flat).stream().map(Photo::getPhotoUrl).collect(Collectors.toSet()))
+                        .photoUrls(photoRepository.findPhotosByFlatId(flat.getId()).stream().map(Photo::getPhotoUrl).collect(Collectors.toSet()))
                         .build()
         ).stream().collect(Collectors.toSet());
     }
@@ -126,7 +126,7 @@ public class FlatService {
                                 .pricePerMonth(flat.getPricePerMonth())
                                 .address(flat.getDistrict() + " " + flat.getStreet() + " " + flat.getHouseNumber())
                                 .underground(flat.getUnderground())
-                                .photoUrls(photoRepository.findPhotosByFlat(flat).stream().map(Photo::getPhotoUrl).collect(Collectors.toSet()))
+                                .photoUrls(photoRepository.findPhotosByFlatId(flat.getId()).stream().map(Photo::getPhotoUrl).collect(Collectors.toSet()))
                                 .description(flat.getDescription())
                                 .build()
         ).orElse(null);
