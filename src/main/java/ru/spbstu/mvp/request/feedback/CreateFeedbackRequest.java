@@ -10,8 +10,6 @@ public record CreateFeedbackRequest(
         @NotBlank
         FeedbackType feedbackType,
         @NotNull
-        User user,
-        @NotNull
-        Flat flat
+        Integer flatId
 ) {
 }
