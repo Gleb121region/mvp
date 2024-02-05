@@ -37,7 +37,7 @@ public class FlatService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private Page<Flat> findFlatByParams(FlatRequest request, Pageable pageable) {
+    private Page<Flat> findFlatsByParams(FlatRequest request, Pageable pageable) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Flat> criteriaQuery = criteriaBuilder.createQuery(Flat.class);
         Root<Flat> flat = criteriaQuery.from(Flat.class);
@@ -97,7 +97,7 @@ public class FlatService {
 
 
     public Set<FlatResponse> getFlatsInfo(FlatRequest request, Integer limit, Integer offset) {
-        Page<Flat> flats = findFlatByParams(request, PageRequest.of(offset, limit));
+        Page<Flat> flats = findFlatsByParams(request, PageRequest.of(offset, limit));
         return flats.map(
                 flat -> FlatResponse.builder()
                         .id(flat.getId())
@@ -132,11 +132,15 @@ public class FlatService {
         ).orElse(null);
     }
 
-    // todo: добавить endpoint который бы создавал объявление
+    // todo: функция которая создает  объявление с квартирой
     public void createFlat(CreateFlatRequest request) {
         return;
     }
 
-    // todo: добавить шадулер который через месяц удалял бы объявление
+    // todo: функция которая удаляет квартиры который были добавлены месяц назад
+
+    public void plannedRemovalOfFlat() {
+
+    }
 
 }
