@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
-// todo:  нужно использовать в endpoint-е который будет создавать объявления
 @Builder
 public record CreateFlatRequest(
         @NotBlank
