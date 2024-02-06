@@ -7,12 +7,14 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.spbstu.mvp.entity.Flat;
 import ru.spbstu.mvp.entity.Photo;
 import ru.spbstu.mvp.repository.FlatRepository;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class FlatService {
+    private final PhotoService photoService;
 
     private final FlatRepository flatRepository;
     private final PhotoRepository photoRepository;
@@ -96,7 +99,7 @@ public class FlatService {
     }
 
 
-    public Set<FlatResponse> getFlatsInfo(FlatRequest request, Integer limit, Integer offset) {
+    public Set<FlatResponse> getFlatsInfo(@Valid FlatRequest request, Integer limit, Integer offset) {
         Page<Flat> flats = findFlatsByParams(request, PageRequest.of(offset, limit));
         return flats.map(
                 flat -> FlatResponse.builder()
@@ -132,9 +135,33 @@ public class FlatService {
         ).orElse(null);
     }
 
-    // todo: функция которая создает  объявление с квартирой
-    public void createFlat(CreateFlatRequest request) {
-        return;
+    public void createFlat(CreateFlatRequest request, List<MultipartFile> photos) {
+        Flat flat = Flat.builder()
+                .city(request.city())
+                .underground(request.underground())
+                .district(request.district())
+                .street(request.street())
+                .houseNumber(request.houseNumber())
+                .floor(request.floor())
+                .floorsCount(request.floorsCount())
+                .totalMeters(request.totalMeters())
+                .roomsCount(request.roomsCount())
+                .pricePerMonth(request.pricePerMonth())
+                .description(request.description())
+                .isRefrigerator(request.isRefrigerator())
+                .isWashingMachine(request.isWashingMachine())
+                .isTV(request.isTV())
+                .isShowerCubicle(request.isShowerCubicle())
+                .isBathtub(request.isBathtub())
+                .isFurnitureRoom(request.isFurnitureRoom())
+                .isFurnitureKitchen(request.isFurnitureKitchen())
+                .isDishwasher(request.isDishwasher())
+                .isAirConditioning(request.isAirConditioning())
+                .isInternet(request.isInternet())
+                .build();
+        flatRepository.save(flat);
+
+        photoService.uploadFlatPhotos(photos, flat.getId());
     }
 
     // todo: функция которая удаляет квартиры который были добавлены месяц назад
