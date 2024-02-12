@@ -97,4 +97,7 @@ public class Flat {
 
     @OneToMany(mappedBy = "flat")
     private Set<Photo> photos;
+
+    @OneToMany(mappedBy = "flat")
+    private Set<Feedback> feedbacks;
 }

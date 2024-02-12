@@ -15,6 +15,7 @@ import ru.spbstu.mvp.entity.enums.Role;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -68,6 +69,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Feedback> feedbacks;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
