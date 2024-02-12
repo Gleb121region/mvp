@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.spbstu.mvp.entity.Feedback;
 import ru.spbstu.mvp.entity.Flat;
 import ru.spbstu.mvp.entity.Photo;
 import ru.spbstu.mvp.repository.FlatRepository;
@@ -37,6 +39,7 @@ public class FlatService {
         CriteriaQuery<Flat> criteriaQuery = criteriaBuilder.createQuery(Flat.class);
         Root<Flat> flat = criteriaQuery.from(Flat.class);
         flat.fetch("photos", JoinType.LEFT);
+        Join<Flat, Feedback> feedbackJoin = flat.join("feedbacks", JoinType.LEFT);
         List<Predicate> predicates = new ArrayList<>();
         if (request.city() != null) {
             predicates.add(criteriaBuilder.equal(flat.get("city"), request.city()));
@@ -86,12 +89,14 @@ public class FlatService {
         if (request.isInternet() != null) {
             predicates.add(criteriaBuilder.equal(flat.get("isInternet"), request.isInternet()));
         }
+        // todo: подумать что делать со SKIP.
+        predicates.add(criteriaBuilder.isNull(feedbackJoin.get("id")));
         criteriaQuery.where(predicates.toArray(new Predicate[0]));
         TypedQuery<Flat> query = entityManager.createQuery(criteriaQuery);
         return new PageImpl<>(query.getResultList(), pageable, query.getResultList().size());
     }
 
-
+    @Transactional(readOnly = true)
     public Set<FlatResponse> getFlatsInfo(@Valid FlatRequest request, Integer limit, Integer offset) {
         Page<Flat> flats = findFlatsByParams(request, PageRequest.of(offset, limit));
         return flats.map(
