@@ -1,6 +1,8 @@
 package ru.spbstu.mvp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.spbstu.mvp.entity.Flat;
 
@@ -11,8 +13,8 @@ import java.util.Optional;
 
 @Repository
 public interface FlatRepository extends JpaRepository<Flat, Integer> {
+    @Query("SELECT DISTINCT flat FROM Flat flat LEFT JOIN FETCH flat.photos WHERE flat.id = :flatId")
+    Optional<Flat> findByIdWithPhotos(@Param("flatId") Integer flatId);
 
-    @Override
-    Optional<Flat> findById(Integer integer);
 }
 

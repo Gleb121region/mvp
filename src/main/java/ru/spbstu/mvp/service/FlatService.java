@@ -3,10 +3,7 @@ package ru.spbstu.mvp.service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.spbstu.mvp.entity.Flat;
 import ru.spbstu.mvp.entity.Photo;
 import ru.spbstu.mvp.repository.FlatRepository;
-import ru.spbstu.mvp.repository.PhotoRepository;
 import ru.spbstu.mvp.request.flat.CreateFlatRequest;
 import ru.spbstu.mvp.request.flat.FlatRequest;
 import ru.spbstu.mvp.response.flat.FlatResponse;
@@ -35,7 +31,6 @@ public class FlatService {
     private final PhotoService photoService;
 
     private final FlatRepository flatRepository;
-    private final PhotoRepository photoRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -44,6 +39,7 @@ public class FlatService {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Flat> criteriaQuery = criteriaBuilder.createQuery(Flat.class);
         Root<Flat> flat = criteriaQuery.from(Flat.class);
+        flat.fetch("photos", JoinType.LEFT);
         List<Predicate> predicates = new ArrayList<>();
         if (request.city() != null) {
             predicates.add(criteriaBuilder.equal(flat.get("city"), request.city()));
@@ -111,14 +107,14 @@ public class FlatService {
                         .pricePerMonth(flat.getPricePerMonth())
                         .address(flat.getDistrict() + " " + flat.getStreet() + " " + flat.getHouseNumber())
                         .underground(flat.getUnderground())
-                        .photoUrls(photoRepository.findPhotosByFlatId(flat.getId()).stream().map(Photo::getPhotoUrl).collect(Collectors.toSet()))
+                        .photoUrls(flat.getPhotos().stream().map(Photo::getPhotoUrl).collect(Collectors.toSet()))
                         .build()
         ).stream().collect(Collectors.toSet());
     }
 
 
     public FlatWithDescriptionResponse getFlatInfo(int flatId) {
-        return flatRepository.findById(flatId).map(
+        return flatRepository.findByIdWithPhotos(flatId).map(
                 flat ->
                         FlatWithDescriptionResponse.builder()
                                 .id(flat.getId())
@@ -129,7 +125,7 @@ public class FlatService {
                                 .pricePerMonth(flat.getPricePerMonth())
                                 .address(flat.getDistrict() + " " + flat.getStreet() + " " + flat.getHouseNumber())
                                 .underground(flat.getUnderground())
-                                .photoUrls(photoRepository.findPhotosByFlatId(flat.getId()).stream().map(Photo::getPhotoUrl).collect(Collectors.toSet()))
+                                .photoUrls(flat.getPhotos().stream().map(Photo::getPhotoUrl).collect(Collectors.toSet()))
                                 .description(flat.getDescription())
                                 .build()
         ).orElse(null);
