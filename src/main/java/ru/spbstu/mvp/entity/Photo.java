@@ -21,7 +21,7 @@ public class Photo {
     @Column(name = "photo_url", nullable = false, updatable = false)
     private String photoUrl;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "flat_id", nullable = false, updatable = false)
     private Flat flat;
 }

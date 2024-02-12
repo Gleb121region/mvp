@@ -95,6 +95,6 @@ public class Flat {
     @Builder.Default
     private OffsetDateTime updatedAt = null;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flat", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "flat")
     private Set<Photo> photos;
 }
