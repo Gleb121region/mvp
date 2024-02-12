@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "feedback")
+@Table(name = "feedback", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "flat_id"})})
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +31,10 @@ public class Feedback {
     private OffsetDateTime updatedAt = null;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "flat_id")
     private Flat flat;
 }
