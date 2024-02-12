@@ -16,6 +16,13 @@ import static ru.spbstu.mvp.entity.enums.Permission.*;
 public enum Role {
 
     USER(Collections.emptySet()),
+
+    FLAT_OWNER(Set.of(
+            OWNER_CREATE,
+            OWNER_READ,
+            OWNER_UPDATE,
+            OWNER_DELETE
+    )),
     ADMIN(
             Set.of(
                     ADMIN_READ,
