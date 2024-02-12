@@ -2,7 +2,9 @@ package ru.spbstu.mvp.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import ru.spbstu.mvp.request.flat.CreateFlatRequest;
 import ru.spbstu.mvp.request.flat.FlatRequest;
 import ru.spbstu.mvp.response.flat.FlatResponse;
 import ru.spbstu.mvp.response.flat.FlatWithDescriptionResponse;
@@ -29,8 +31,8 @@ public class FlatController {
         return flatService.getFlatInfo(flatId);
     }
 
-//    @PostMapping
-//    public void createFlat(CreateFlatRequest request, List<MultipartFile> photos) {
-//        flatService.createFlat(request, photos);
-//    }
+    @PostMapping
+    public void createFlatFromRequestWithoutPhoto(@RequestBody CreateFlatRequest request) {
+        flatService.createFlatFromRequestWithoutPhoto(request);
+    }
 }

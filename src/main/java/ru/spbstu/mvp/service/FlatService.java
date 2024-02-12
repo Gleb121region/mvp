@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import ru.spbstu.mvp.entity.Flat;
 import ru.spbstu.mvp.entity.Photo;
 import ru.spbstu.mvp.repository.FlatRepository;
@@ -28,8 +27,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class FlatService {
-    private final PhotoService photoService;
-
     private final FlatRepository flatRepository;
 
     @PersistenceContext
@@ -131,7 +128,7 @@ public class FlatService {
         ).orElse(null);
     }
 
-    public void createFlat(CreateFlatRequest request, List<MultipartFile> photos) {
+    public void createFlatFromRequestWithoutPhoto(CreateFlatRequest request) {
         Flat flat = Flat.builder()
                 .city(request.city())
                 .underground(request.underground())
@@ -156,8 +153,6 @@ public class FlatService {
                 .isInternet(request.isInternet())
                 .build();
         flatRepository.save(flat);
-
-        photoService.uploadFlatPhotos(photos, flat.getId());
     }
 
     // todo: функция которая удаляет квартиры который были добавлены месяц назад
