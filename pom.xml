@@ -11,8 +11,8 @@
     <groupId>ru.spbstu</groupId>
     <artifactId>mvp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>flat-rent-service</name>
-    <description>flat rent service</description>
+    <name>announcement-rent-service</name>
+    <description>announcement rent service</description>
     <properties>
         <java.version>21</java.version>
     </properties>
