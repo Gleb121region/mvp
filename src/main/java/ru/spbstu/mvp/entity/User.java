@@ -52,9 +52,6 @@ public class User implements UserDetails {
     @Size(max = 11)
     private String phone;
 
-    @Nullable
-    private String linkVK;
-
     @Email
     @Column(unique = true, nullable = false)
     private String email;
@@ -72,6 +69,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private Set<Feedback> feedbacks;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserPhoto> photos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

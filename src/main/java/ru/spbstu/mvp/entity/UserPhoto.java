@@ -10,8 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "photo")
-public class Photo {
+@Table(name = "user_photo")
+public class UserPhoto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "photo_id", nullable = false, updatable = false)
@@ -22,6 +22,6 @@ public class Photo {
     private String photoUrl;
 
     @ManyToOne
-    @JoinColumn(name = "announcement_id", nullable = false, updatable = false)
-    private Announcement announcement;
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    private User user;
 }

@@ -17,28 +17,19 @@ public record UserResponse(
         @NotBlank
         @Pattern(regexp = "^[a-zA-Z]+$|^[а-яА-Я]+$")
         String firstname,
-
         @Nullable
         @Pattern(regexp = "^[a-zA-Z]+$|^[а-яА-Я]+$")
         String lastname,
-
         @Nullable
         String aboutMe,
-
         @Nullable
         @Enumerated(EnumType.STRING)
         Gender gender,
-
         @Nullable
         Date birthdayDate,
-
         @Nullable
         @Size(max = 11)
         String phone,
-
-        @Nullable
-        String linkVK,
-
         @NotBlank
         @Email
         String email

@@ -55,7 +55,6 @@ public class UserService {
                         .gender(user.getGender())
                         .birthdayDate(user.getBirthdayDate())
                         .phone(user.getPhone())
-                        .linkVK(user.getLinkVK())
                         .email(user.getEmail())
                         .build()).orElse(null);
     }

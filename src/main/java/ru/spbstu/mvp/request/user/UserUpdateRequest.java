@@ -26,8 +26,5 @@ public record UserUpdateRequest(
         String phone,
         @Nullable
         @Email
-        String email,
-        @Nullable
-        String linkVK
-) {
+        String email) {
 }

@@ -38,8 +38,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                     u.gender = :#{#request.gender()},
                     u.birthdayDate = :#{#request.birthdayDate()},
                     u.email = :#{#request.email()},
-                    u.phone = :#{#request.phone()},
-                    u.linkVK = :#{#request.linkVK()}
+                    u.phone = :#{#request.phone()}
                     WHERE u.id = :userId
             """)
     void updateUser(@Param("userId") Integer userId, @Param("request") UserUpdateRequest request);
