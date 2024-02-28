@@ -98,6 +98,7 @@ public class AuthenticationService {
     tokenRepository.save(token);
   }
 
+  // todo: подумать насчет того чтобы удалять не валидные token-ы.
   private void revokeAllUserTokens(User user) {
     var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
     if (validUserTokens.isEmpty())
