@@ -1,4 +1,4 @@
-package ru.spbstu.mvp.request.flat;
+package ru.spbstu.mvp.request.announcement;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
-public record CreateFlatRequest(
+public record CreateAnnouncementRequest(
         @NotBlank
         String city,
         @NotBlank

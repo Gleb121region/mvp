@@ -10,11 +10,11 @@ import com.backblaze.b2.client.structures.B2UploadFileRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.spbstu.mvp.entity.Flat;
+import ru.spbstu.mvp.entity.Announcement;
 import ru.spbstu.mvp.entity.Photo;
-import ru.spbstu.mvp.exception.FlatNotFoundException;
+import ru.spbstu.mvp.exception.AnnouncementNotFoundException;
 import ru.spbstu.mvp.exception.PhotoUploadException;
-import ru.spbstu.mvp.repository.FlatRepository;
+import ru.spbstu.mvp.repository.AnnouncementRepository;
 import ru.spbstu.mvp.repository.PhotoRepository;
 
 import java.io.File;
@@ -33,9 +33,9 @@ public class PhotoService {
     private static final String bucketUrl = "https://f003.backblazeb2.com/file/gleb-bucket/";
 
     private final PhotoRepository photoRepository;
-    private final FlatRepository flatRepository;
+    private final AnnouncementRepository announcementRepository;
 
-    private void uploadFlatPhoto(MultipartFile photo, Flat flat) {
+    private void uploadFlatPhoto(MultipartFile photo, Announcement announcement) {
         B2StorageClient client = B2StorageClientFactory.createDefaultFactory().create(APP_KEY_ID, APP_KEY, USER_AGENT);
         try {
             File tempFile = File.createTempFile("upload", null);
@@ -44,7 +44,7 @@ public class PhotoService {
             final String fileName = "demo/" + photo.getOriginalFilename();
             B2UploadFileRequest request = B2UploadFileRequest.builder(bucketId, fileName, B2ContentTypes.B2_AUTO, source).setCustomField("color", "blue").build();
             client.uploadSmallFile(request);
-            Photo currentPhoto = Photo.builder().photoUrl(bucketUrl + fileName).flat(flat).build();
+            Photo currentPhoto = Photo.builder().photoUrl(bucketUrl + fileName).announcement(announcement).build();
             photoRepository.save(currentPhoto);
         } catch (B2Exception | IOException e) {
             throw new PhotoUploadException("Photo upload exception");
@@ -52,11 +52,11 @@ public class PhotoService {
     }
 
     public void uploadFlatPhotos(List<MultipartFile> photos, int flatId) {
-        Optional<Flat> optionalFlat = flatRepository.findById(flatId);
+        Optional<Announcement> optionalFlat = announcementRepository.findById(flatId);
         if (optionalFlat.isPresent()) {
             photos.forEach(photo -> uploadFlatPhoto(photo, optionalFlat.get()));
         } else {
-            throw new FlatNotFoundException("Flat not found");
+            throw new AnnouncementNotFoundException("Flat not found");
         }
     }
 }

@@ -22,6 +22,6 @@ public class Photo {
     private String photoUrl;
 
     @ManyToOne
-    @JoinColumn(name = "flat_id", nullable = false, updatable = false)
-    private Flat flat;
+    @JoinColumn(name = "announcement_id", nullable = false, updatable = false)
+    private Announcement announcement;
 }
