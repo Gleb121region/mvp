@@ -8,6 +8,7 @@ import com.backblaze.b2.client.contentSources.B2FileContentSource;
 import com.backblaze.b2.client.exceptions.B2Exception;
 import com.backblaze.b2.client.structures.B2UploadFileRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.spbstu.mvp.entity.User;
@@ -19,7 +20,10 @@ import ru.spbstu.mvp.repository.UserRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
+
+import static ru.spbstu.mvp.service.UserService.getUser;
 
 @Service
 @RequiredArgsConstructor
@@ -50,8 +54,9 @@ public class UserPhotoService {
         }
     }
 
-    public void uploadUserPhotos(List<MultipartFile> photos, int userId) {
-        var optionalFlat = userRepository.findById(userId);
+    public void uploadUserPhotos(List<MultipartFile> photos, Principal connectedUser) {
+        User user = getUser((UsernamePasswordAuthenticationToken) connectedUser);
+        var optionalFlat = userRepository.findById(user.getId());
         if (optionalFlat.isPresent()) {
             photos.forEach(photo -> uploadUserPhoto(photo, optionalFlat.get()));
         } else {

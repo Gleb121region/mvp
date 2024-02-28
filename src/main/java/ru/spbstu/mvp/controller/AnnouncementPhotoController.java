@@ -20,16 +20,6 @@ public class AnnouncementPhotoController {
                                          @RequestParam(value = "userId") Integer announcementId) {
         announcementPhotoService.uploadAnnouncementPhotos(photos, announcementId);
     }
-
-//    @GetMapping
-//    public List<AnnouncementPhotoRequest> x(@RequestParam(value = "announcementId") Integer announcementId) {
-//        announcementPhotoService.
-//    }
-//
-//    @DeleteMapping(value = "/hide")
-//    public void hideAnnouncementPhoto(@RequestParam(value = "announcementId") Integer announcementId,
-//                                      @RequestParam(value = "photoIds") List<Integer> photoIds) {
-//        announcementPhotoService.
-//    }
+    // todo: добавить возможность удалить какие-то фотографии
 
 }

@@ -56,7 +56,7 @@ public class AnnouncementService {
         Join<Announcement, Feedback> feedbackJoin = announcement.join("feedbacks", JoinType.LEFT);
         List<Predicate> predicates = new ArrayList<>();
 
-        predicates.add(criteriaBuilder.equal(announcement.get("isOld"), false));
+        predicates.add(criteriaBuilder.equal(announcement.get("isHide"), false));
         predicates.add(criteriaBuilder.or(criteriaBuilder.isNull(feedbackJoin.get("id")), criteriaBuilder.notEqual(feedbackJoin.get("feedbackType"), FeedbackType.DISLIKE)));
 
         if (request.city() != null) {

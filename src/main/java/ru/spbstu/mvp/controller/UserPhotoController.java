@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.spbstu.mvp.service.UserPhotoService;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,9 @@ public class UserPhotoController {
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void createAnnouncementPhotos(@RequestParam(value = "photos") List<MultipartFile> photos,
-                                         @RequestParam(value = "userId") Integer userId) {
-        userPhotoService.uploadUserPhotos(photos, userId);
+                                         Principal connectedUser) {
+        userPhotoService.uploadUserPhotos(photos, connectedUser);
     }
+    // todo: добавить возможность удалить какие-то фотографии
+
 }
