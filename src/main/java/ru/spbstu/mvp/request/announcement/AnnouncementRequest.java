@@ -1,4 +1,4 @@
-package ru.spbstu.mvp.request.flat;
+package ru.spbstu.mvp.request.announcement;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -8,7 +8,7 @@ import org.springframework.lang.Nullable;
 import java.util.Set;
 
 @Builder
-public record FlatRequest(
+public record AnnouncementRequest(
         String city,
         @Nullable
         String underground,

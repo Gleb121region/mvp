@@ -17,10 +17,10 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Flat {
+public class Announcement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "flat_id", nullable = false, updatable = false)
+    @Column(name = "announcement_id", nullable = false, updatable = false)
     private Integer id;
 
     @NotBlank
@@ -87,6 +87,10 @@ public class Flat {
     @NotNull
     private Boolean isInternet;
 
+    @NotNull
+    @Builder.Default
+    private Boolean isHide = false;
+
     @Column
     @Builder.Default
     private OffsetDateTime createdAt = OffsetDateTime.now();
@@ -95,9 +99,9 @@ public class Flat {
     @Builder.Default
     private OffsetDateTime updatedAt = null;
 
-    @OneToMany(mappedBy = "flat")
+    @OneToMany(mappedBy = "announcement")
     private Set<Photo> photos;
 
-    @OneToMany(mappedBy = "flat")
+    @OneToMany(mappedBy = "announcement")
     private Set<Feedback> feedbacks;
 }

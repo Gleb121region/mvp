@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.util.Set;
 
 @Builder
-public record FlatResponse(
+public record AnnouncementResponse(
         Integer id,
         Integer floor,
         Integer floorsCount,
