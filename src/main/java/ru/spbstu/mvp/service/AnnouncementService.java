@@ -15,12 +15,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.spbstu.mvp.entity.Announcement;
+import ru.spbstu.mvp.entity.AnnouncementPhoto;
 import ru.spbstu.mvp.entity.Feedback;
-import ru.spbstu.mvp.entity.Photo;
 import ru.spbstu.mvp.entity.enums.FeedbackType;
+import ru.spbstu.mvp.mapper.AnnouncementMapper;
 import ru.spbstu.mvp.repository.AnnouncementRepository;
 import ru.spbstu.mvp.request.announcement.AnnouncementRequest;
 import ru.spbstu.mvp.request.announcement.CreateAnnouncementRequest;
+import ru.spbstu.mvp.request.announcement.UpdateAnnouncementRequest;
 import ru.spbstu.mvp.response.flat.AnnouncementResponse;
 import ru.spbstu.mvp.response.flat.AnnouncementWithDescriptionResponse;
 
@@ -113,45 +115,34 @@ public class AnnouncementService {
     @Transactional(readOnly = true)
     public Set<AnnouncementResponse> getAnnouncementsInfo(@Valid AnnouncementRequest request, Integer limit, Integer offset) {
         Page<Announcement> announcements = findAnnouncementsByParams(request, PageRequest.of(offset, limit));
-        return announcements.map(announcement -> AnnouncementResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).roomsCount(announcement.getRoomsCount()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcement.getPhotos().stream().map(Photo::getPhotoUrl).collect(Collectors.toSet()))
+        return announcements.map(announcement -> AnnouncementResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).roomsCount(announcement.getRoomsCount()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcement.getPhotos().stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet()))
                         .build()
         ).stream().collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)
     public AnnouncementWithDescriptionResponse getAnnouncementInfo(int announcementId) {
-        return announcementRepository.findByIdWithPhotos(announcementId).map(announcement -> AnnouncementWithDescriptionResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).roomsCount(announcement.getRoomsCount()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcement.getPhotos().stream().map(Photo::getPhotoUrl).collect(Collectors.toSet())).description(announcement.getDescription())
+        return announcementRepository.findByIdWithPhotos(announcementId).map(announcement -> AnnouncementWithDescriptionResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).roomsCount(announcement.getRoomsCount()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcement.getPhotos().stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet())).description(announcement.getDescription())
                                 .build()
         ).orElse(null);
     }
 
-    public void createAnnouncementFromRequestWithoutPhoto(CreateAnnouncementRequest request) {
-        Announcement announcement = Announcement.builder()
-                .city(request.city())
-                .underground(request.underground())
-                .district(request.district())
-                .street(request.street())
-                .houseNumber(request.houseNumber())
-                .floor(request.floor())
-                .floorsCount(request.floorsCount())
-                .totalMeters(request.totalMeters())
-                .roomsCount(request.roomsCount())
-                .pricePerMonth(request.pricePerMonth())
-                .description(request.description())
-                .isRefrigerator(request.isRefrigerator())
-                .isWashingMachine(request.isWashingMachine())
-                .isTV(request.isTV())
-                .isShowerCubicle(request.isShowerCubicle())
-                .isBathtub(request.isBathtub())
-                .isFurnitureRoom(request.isFurnitureRoom())
-                .isFurnitureKitchen(request.isFurnitureKitchen())
-                .isDishwasher(request.isDishwasher())
-                .isAirConditioning(request.isAirConditioning())
-                .isInternet(request.isInternet())
-                .build();
+    @Transactional
+    public Integer createAnnouncementFromRequestWithoutPhoto(CreateAnnouncementRequest request) {
+        Announcement announcement = AnnouncementMapper.mapCreateAnnouncementRequestToAnnouncement(request);
         announcementRepository.save(announcement);
+        OffsetDateTime createdAt = announcement.getCreatedAt();
+        return announcementRepository
+                .findByCreatedAt(createdAt)
+                .map(Announcement::getId)
+                .orElse(null);
     }
 
+
+    @Transactional
+    public void updateAnnouncementByAnnouncementId(UpdateAnnouncementRequest request) {
+        announcementRepository.updateAnnouncementById(request);
+    }
 
     @Transactional
     @Scheduled(fixedRate = SECONDS_PER_MINUTE * MILLISECONDS_PER_SECOND)

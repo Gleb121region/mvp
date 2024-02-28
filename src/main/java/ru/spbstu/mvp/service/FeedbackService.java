@@ -7,15 +7,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.spbstu.mvp.entity.Announcement;
+import ru.spbstu.mvp.entity.AnnouncementPhoto;
 import ru.spbstu.mvp.entity.Feedback;
-import ru.spbstu.mvp.entity.Photo;
 import ru.spbstu.mvp.entity.User;
 import ru.spbstu.mvp.entity.enums.FeedbackType;
 import ru.spbstu.mvp.exception.AnnouncementNotFoundException;
 import ru.spbstu.mvp.exception.UserNotFoundException;
 import ru.spbstu.mvp.repository.AnnouncementRepository;
 import ru.spbstu.mvp.repository.FeedbackRepository;
-import ru.spbstu.mvp.repository.PhotoRepository;
+import ru.spbstu.mvp.repository.AnnouncementPhotoRepository;
 import ru.spbstu.mvp.repository.UserRepository;
 import ru.spbstu.mvp.request.feedback.CreateFeedbackRequest;
 import ru.spbstu.mvp.response.flat.AnnouncementResponse;
@@ -41,7 +41,7 @@ public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
     private final AnnouncementRepository announcementRepository;
     private final UserRepository userRepository;
-    private final PhotoRepository photoRepository;
+    private final AnnouncementPhotoRepository announcementPhotoRepository;
 
     @Transactional
     public void createFeedback(CreateFeedbackRequest request, Principal connectedUser) {
@@ -59,7 +59,7 @@ public class FeedbackService {
                         .build();
                 feedbackRepository.save(feedback);
             } else {
-                throw new AnnouncementNotFoundException("Flat not found");
+                throw new AnnouncementNotFoundException("Announcement not found");
 
             }
         } else {
@@ -78,7 +78,7 @@ public class FeedbackService {
             User user = optionalUser.get();
             Set<Feedback> likedFeedbacks = feedbackRepository.findByFeedbackTypeAndUser(FeedbackType.LIKE, user);
             Set<Announcement> likedAnnouncements = likedFeedbacks.stream().map(Feedback::getAnnouncement).collect(Collectors.toSet());
-            return likedAnnouncements.stream().map(announcement -> AnnouncementResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).roomsCount(announcement.getRoomsCount()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(photoRepository.findPhotosByAnnouncementId(announcement.getId()).stream().map(Photo::getPhotoUrl).collect(Collectors.toSet()))
+            return likedAnnouncements.stream().map(announcement -> AnnouncementResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).roomsCount(announcement.getRoomsCount()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcementPhotoRepository.findPhotosByAnnouncementId(announcement.getId()).stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet()))
                             .build()
             ).collect(Collectors.toSet());
         } else {

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.OffsetDateTime;
@@ -91,16 +93,15 @@ public class Announcement {
     @Builder.Default
     private Boolean isHide = false;
 
-    @Column
-    @Builder.Default
-    private OffsetDateTime createdAt = OffsetDateTime.now();
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private OffsetDateTime createdAt;
 
-    @Column
-    @Builder.Default
+    @UpdateTimestamp
     private OffsetDateTime updatedAt = null;
 
     @OneToMany(mappedBy = "announcement")
-    private Set<Photo> photos;
+    private Set<AnnouncementPhoto> photos;
 
     @OneToMany(mappedBy = "announcement")
     private Set<Feedback> feedbacks;

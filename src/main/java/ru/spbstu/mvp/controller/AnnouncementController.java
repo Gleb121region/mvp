@@ -5,6 +5,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 import ru.spbstu.mvp.request.announcement.AnnouncementRequest;
 import ru.spbstu.mvp.request.announcement.CreateAnnouncementRequest;
+import ru.spbstu.mvp.request.announcement.UpdateAnnouncementRequest;
 import ru.spbstu.mvp.response.flat.AnnouncementResponse;
 import ru.spbstu.mvp.response.flat.AnnouncementWithDescriptionResponse;
 import ru.spbstu.mvp.service.AnnouncementService;
@@ -31,7 +32,12 @@ public class AnnouncementController {
     }
 
     @PostMapping
-    public void createFlatFromRequestWithoutPhoto(@RequestBody CreateAnnouncementRequest request) {
-        announcementService.createAnnouncementFromRequestWithoutPhoto(request);
+    public Integer createFlatFromRequestWithoutPhoto(@RequestBody CreateAnnouncementRequest request) {
+        return announcementService.createAnnouncementFromRequestWithoutPhoto(request);
+    }
+
+    @PutMapping
+    public void updateFlatFromRequestWithoutPhoto(@RequestBody UpdateAnnouncementRequest request){
+        announcementService.updateAnnouncementByAnnouncementId(request);
     }
 }
