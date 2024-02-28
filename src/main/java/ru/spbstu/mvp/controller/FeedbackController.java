@@ -3,7 +3,7 @@ package ru.spbstu.mvp.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.spbstu.mvp.request.feedback.CreateFeedbackRequest;
-import ru.spbstu.mvp.response.flat.FlatResponse;
+import ru.spbstu.mvp.response.flat.AnnouncementResponse;
 import ru.spbstu.mvp.service.FeedbackService;
 
 import java.security.Principal;
@@ -18,7 +18,7 @@ public class FeedbackController {
 
     @GetMapping("/liked")
     @ResponseBody
-    public Set<FlatResponse> getLikedFeedbackByUser(Principal connectedUser) {
+    public Set<AnnouncementResponse> getLikedFeedbackByUser(Principal connectedUser) {
         return feedbackService.getLikeFeedbacks(connectedUser);
     }
 
