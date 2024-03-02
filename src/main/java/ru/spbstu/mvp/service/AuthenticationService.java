@@ -68,14 +68,7 @@ public class AuthenticationService {
   }
 
   public AuthenticationResponse changePassword(ChangePasswordWithEmailRequest request) {
-    authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                    request.email(),
-                    request.currentPassword()
-            )
-    );
-    var user = repository.findByEmail(request.email())
-            .orElseThrow();
+    var user = repository.findByEmail(request.email()).orElseThrow();
     repository.changeUserPassword(user.getId(), passwordEncoder.encode(request.newPassword()));
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
