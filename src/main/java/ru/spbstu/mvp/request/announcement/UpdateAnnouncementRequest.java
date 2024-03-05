@@ -4,13 +4,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
+import ru.spbstu.mvp.entity.enums.interview.City;
 
 @Builder
 public record UpdateAnnouncementRequest(
         @NotBlank
         Integer announcementId,
         @NotBlank
-        String city,
+        City city,
         @NotBlank
         String underground,
         @NotBlank
@@ -26,7 +28,7 @@ public record UpdateAnnouncementRequest(
         @NotNull
         Double totalMeters,
         @NotNull
-        Integer roomsCount,
+        ApartmentType apartmentType,
         @NotNull
         Double pricePerMonth,
         @NotBlank

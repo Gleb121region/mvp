@@ -14,7 +14,7 @@ public class AnnouncementMapper {
                 .floor(request.floor())
                 .floorsCount(request.floorsCount())
                 .totalMeters(request.totalMeters())
-                .roomsCount(request.roomsCount())
+                .apartmentType(request.apartmentType())
                 .pricePerMonth(request.pricePerMonth())
                 .description(request.description())
                 .isRefrigerator(request.isRefrigerator())

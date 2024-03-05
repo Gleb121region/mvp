@@ -69,7 +69,7 @@ public class AnnouncementService {
             predicates.add(criteriaBuilder.equal(announcement.get("district"), request.district()));
         }
         if (request.roomsCounts() != null) {
-            predicates.add(announcement.get("roomsCount").in(request.roomsCounts()));
+            predicates.add(announcement.get("apartmentType").in(request.roomsCounts()));
         }
         if (request.maxPricePerMonth() != null) {
             predicates.add(criteriaBuilder.lessThanOrEqualTo(announcement.get("pricePerMonth"), request.maxPricePerMonth()));
@@ -115,14 +115,14 @@ public class AnnouncementService {
     @Transactional(readOnly = true)
     public Set<AnnouncementResponse> getAnnouncementsInfo(@Valid AnnouncementRequest request, Integer limit, Integer offset) {
         Page<Announcement> announcements = findAnnouncementsByParams(request, PageRequest.of(offset, limit));
-        return announcements.map(announcement -> AnnouncementResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).roomsCount(announcement.getRoomsCount()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcement.getPhotos().stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet()))
+        return announcements.map(announcement -> AnnouncementResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).apartmentType(announcement.getApartmentType()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcement.getPhotos().stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet()))
                         .build()
         ).stream().collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)
     public AnnouncementWithDescriptionResponse getAnnouncementInfo(int announcementId) {
-        return announcementRepository.findByIdWithPhotos(announcementId).map(announcement -> AnnouncementWithDescriptionResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).roomsCount(announcement.getRoomsCount()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcement.getPhotos().stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet())).description(announcement.getDescription())
+        return announcementRepository.findByIdWithPhotos(announcementId).map(announcement -> AnnouncementWithDescriptionResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).apartmentType(announcement.getApartmentType()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcement.getPhotos().stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet())).description(announcement.getDescription())
                                 .build()
         ).orElse(null);
     }

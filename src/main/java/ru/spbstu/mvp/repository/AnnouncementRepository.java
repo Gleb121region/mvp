@@ -33,7 +33,7 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Inte
             "announcement.floor = :#{#request.floor()}, " +
             "announcement.floorsCount = :#{#request.floorsCount()}, " +
             "announcement.totalMeters = :#{#request.totalMeters()}, " +
-            "announcement.roomsCount = :#{#request.roomsCount()}, " +
+            "announcement.apartmentType = :#{#request.apartmentType()}, " +
             "announcement.pricePerMonth = :#{#request.pricePerMonth()}, " +
             "announcement.description = :#{#request.description()}, " +
             "announcement.isRefrigerator = :#{#request.isRefrigerator()}, " +

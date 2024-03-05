@@ -1,6 +1,8 @@
 package ru.spbstu.mvp.response.flat;
 
 import lombok.Builder;
+import org.springframework.lang.Nullable;
+import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
 
 import java.util.Set;
 
@@ -10,9 +12,10 @@ public record AnnouncementResponse(
         Integer floor,
         Integer floorsCount,
         Double totalMeters,
-        Integer roomsCount,
+        ApartmentType apartmentType,
         Double pricePerMonth,
         String address,
+        @Nullable
         String underground,
         Set<String> photoUrls) {
 }

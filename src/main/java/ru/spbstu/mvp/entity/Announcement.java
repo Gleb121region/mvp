@@ -8,6 +8,10 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.lang.Nullable;
+import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
+import ru.spbstu.mvp.entity.enums.interview.City;
+import ru.spbstu.mvp.entity.enums.interview.Term;
 
 import java.time.OffsetDateTime;
 import java.util.Set;
@@ -25,10 +29,16 @@ public class Announcement {
     @Column(name = "announcement_id", nullable = false, updatable = false)
     private Integer id;
 
-    @NotBlank
-    private String city;
+    @Enumerated(EnumType.STRING)
+    private City city;
 
-    @NotBlank
+    @Enumerated(EnumType.STRING)
+    private ApartmentType apartmentType;
+
+    @Enumerated(EnumType.STRING)
+    private Term term;
+
+    @Nullable
     private String underground;
 
     @NotBlank
@@ -48,9 +58,6 @@ public class Announcement {
 
     @NotNull
     private Double totalMeters;
-
-    @NotNull
-    private Integer roomsCount;
 
     @NotNull
     private Double pricePerMonth;
