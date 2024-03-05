@@ -1,8 +1,6 @@
 package ru.spbstu.mvp.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,17 +11,14 @@ import ru.spbstu.mvp.entity.User;
 import ru.spbstu.mvp.entity.enums.FeedbackType;
 import ru.spbstu.mvp.exception.AnnouncementNotFoundException;
 import ru.spbstu.mvp.exception.UserNotFoundException;
+import ru.spbstu.mvp.repository.AnnouncementPhotoRepository;
 import ru.spbstu.mvp.repository.AnnouncementRepository;
 import ru.spbstu.mvp.repository.FeedbackRepository;
-import ru.spbstu.mvp.repository.AnnouncementPhotoRepository;
 import ru.spbstu.mvp.repository.UserRepository;
 import ru.spbstu.mvp.request.feedback.CreateFeedbackRequest;
 import ru.spbstu.mvp.response.flat.AnnouncementResponse;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,11 +27,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class FeedbackService {
-    private final int SECONDS_PER_MINUTE = 60;
-    private final int MILLISECONDS_PER_SECOND = 1000;
-    private final int TWO_WEEK_AGO = 2;
-    private final int MOSCOW_TIME_ZONE = 3;
-
 
     private final FeedbackRepository feedbackRepository;
     private final AnnouncementRepository announcementRepository;
@@ -67,7 +57,6 @@ public class FeedbackService {
         }
     }
 
-
     @Transactional(readOnly = true)
     public Set<AnnouncementResponse> getLikeFeedbacks(Principal connectedUser) {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) connectedUser;
@@ -86,13 +75,4 @@ public class FeedbackService {
         }
     }
 
-
-    @Transactional
-    @Scheduled(fixedRate = SECONDS_PER_MINUTE * MILLISECONDS_PER_SECOND)
-    @Async
-    public void scheduledRestorationOfAnnouncements() {
-        LocalDateTime monthAgo = LocalDateTime.now().minusWeeks(TWO_WEEK_AGO);
-        OffsetDateTime offsetDateTimeTwoWeekAgo = monthAgo.atOffset(ZoneOffset.ofHours(MOSCOW_TIME_ZONE));
-        feedbackRepository.deleteOldFeedback(offsetDateTimeTwoWeekAgo);
-    }
 }

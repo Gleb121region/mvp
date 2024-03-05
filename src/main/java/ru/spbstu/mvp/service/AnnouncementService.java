@@ -10,8 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.spbstu.mvp.entity.Announcement;
@@ -26,9 +24,7 @@ import ru.spbstu.mvp.request.announcement.UpdateAnnouncementRequest;
 import ru.spbstu.mvp.response.flat.AnnouncementResponse;
 import ru.spbstu.mvp.response.flat.AnnouncementWithDescriptionResponse;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -37,11 +33,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AnnouncementService {
-
-    private final int SECONDS_PER_MINUTE = 60;
-    private final int MILLISECONDS_PER_SECOND = 1000;
-    private final int ONE_MONTH_AGO = 1;
-    private final int MOSCOW_TIME_ZONE = 3;
 
     private final AnnouncementRepository announcementRepository;
 
@@ -138,19 +129,9 @@ public class AnnouncementService {
                 .orElse(null);
     }
 
-
     @Transactional
     public void updateAnnouncementByAnnouncementId(UpdateAnnouncementRequest request) {
         announcementRepository.updateAnnouncementById(request);
-    }
-
-    @Transactional
-    @Scheduled(fixedRate = SECONDS_PER_MINUTE * MILLISECONDS_PER_SECOND)
-    @Async
-    public void scheduledHideOfAnnouncement() {
-        LocalDateTime monthAgo = LocalDateTime.now().minusMonths(ONE_MONTH_AGO);
-        OffsetDateTime offsetDateTimeMonthAgo = monthAgo.atOffset(ZoneOffset.ofHours(MOSCOW_TIME_ZONE));
-        announcementRepository.updateIsHideFlagToTrueIfBefore(offsetDateTimeMonthAgo);
     }
 
 }
