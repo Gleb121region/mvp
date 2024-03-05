@@ -78,7 +78,7 @@ public class FeedbackService {
             User user = optionalUser.get();
             Set<Feedback> likedFeedbacks = feedbackRepository.findByFeedbackTypeAndUser(FeedbackType.LIKE, user);
             Set<Announcement> likedAnnouncements = likedFeedbacks.stream().map(Feedback::getAnnouncement).collect(Collectors.toSet());
-            return likedAnnouncements.stream().map(announcement -> AnnouncementResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).roomsCount(announcement.getRoomsCount()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcementPhotoRepository.findPhotosByAnnouncementId(announcement.getId()).stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet()))
+            return likedAnnouncements.stream().map(announcement -> AnnouncementResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).apartmentType(announcement.getApartmentType()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcementPhotoRepository.findPhotosByAnnouncementId(announcement.getId()).stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet()))
                             .build()
             ).collect(Collectors.toSet());
         } else {
