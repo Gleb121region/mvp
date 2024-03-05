@@ -68,8 +68,8 @@ public class AnnouncementService {
         if (request.district() != null) {
             predicates.add(criteriaBuilder.equal(announcement.get("district"), request.district()));
         }
-        if (request.roomsCounts() != null) {
-            predicates.add(announcement.get("apartmentType").in(request.roomsCounts()));
+        if (request.apartmentTypes() != null) {
+            predicates.add(announcement.get("apartmentType").in(request.apartmentTypes()));
         }
         if (request.maxPricePerMonth() != null) {
             predicates.add(criteriaBuilder.lessThanOrEqualTo(announcement.get("pricePerMonth"), request.maxPricePerMonth()));

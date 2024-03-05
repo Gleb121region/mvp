@@ -4,18 +4,20 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Builder;
 import org.springframework.lang.Nullable;
+import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
+import ru.spbstu.mvp.entity.enums.interview.City;
 
 import java.util.Set;
 
 @Builder
 public record AnnouncementRequest(
-        String city,
+        City city,
         @Nullable
         String underground,
         @Nullable
         String district,
         @Nullable
-        Set<Integer> roomsCounts,
+        Set<ApartmentType> apartmentTypes,
         @Nullable
         @Max(100_000_000)
         Double maxPricePerMonth,
