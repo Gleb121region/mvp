@@ -7,12 +7,14 @@ import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
 import ru.spbstu.mvp.entity.enums.interview.City;
 import ru.spbstu.mvp.entity.enums.interview.Term;
 
+import java.util.Set;
+
 @Builder
 public record GetSurveyResponse(
         @NotBlank
         Term term,
         @NotBlank
-        ApartmentType apartmentType,
+        Set<ApartmentType> apartmentTypes,
         @NotBlank
         City city,
         @NotBlank

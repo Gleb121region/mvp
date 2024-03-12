@@ -2,10 +2,11 @@ package ru.spbstu.mvp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.lang.Nullable;
 import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
 import ru.spbstu.mvp.entity.enums.interview.City;
 import ru.spbstu.mvp.entity.enums.interview.Term;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,23 +14,20 @@ import ru.spbstu.mvp.entity.enums.interview.Term;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "survey")
-public class Survey {
+@Table(name = "survey_answers")
+public class SurveyAnswers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "survey_id", nullable = false, updatable = false)
+    @Column(name = "survey_answer_id", nullable = false, updatable = false)
     public Integer id;
 
-    @Nullable
     @Enumerated(EnumType.STRING)
     private Term term;
 
-    @Nullable
     @Enumerated(EnumType.STRING)
-    private ApartmentType apartmentType;
+    private Set<ApartmentType> apartmentType;
 
-    @Nullable
     @Enumerated(EnumType.STRING)
     private City city;
 

@@ -3,7 +3,7 @@ package ru.spbstu.mvp.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
-import ru.spbstu.mvp.entity.Survey;
+import ru.spbstu.mvp.entity.SurveyAnswers;
 import ru.spbstu.mvp.entity.User;
 import ru.spbstu.mvp.exception.UserNotFoundException;
 import ru.spbstu.mvp.repository.SurveyRepository;
@@ -16,8 +16,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ru.spbstu.mvp.service.UserService.getUser;
-
 @Service
 @RequiredArgsConstructor
 public class SurveyService {
@@ -28,9 +26,7 @@ public class SurveyService {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) connectedUser;
         Optional<User> currentUser = userRepository.findByEmail(authenticationToken.getName());
         if (currentUser.isPresent()) {
-            Survey survey = Survey.builder()
-                    .term(request.term())
-                    .apartmentType(request.apartmentType())
+            SurveyAnswers surveyAnswers = SurveyAnswers.builder().term(request.term()).apartmentType(request.apartmentTypes())
                     .city(request.city())
                     .minBudget(request.minBudget())
                     .maxBudget(request.maxBudget())
@@ -38,7 +34,7 @@ public class SurveyService {
                     .maxArea(request.maxArea())
                     .user(currentUser.get())
                     .build();
-            surveyRepository.save(survey);
+            surveyRepository.save(surveyAnswers);
         } else {
             throw new UserNotFoundException("User not found by email");
         }
@@ -46,14 +42,13 @@ public class SurveyService {
 
 
     public Set<GetSurveyResponse> findSurveyByToken(Principal connectedUser) {
-        User currentUser = getUser((UsernamePasswordAuthenticationToken) connectedUser);
-        String token = currentUser.getTokens().stream().map(it -> {
-            if (!it.expired && !it.revoked) {
-                return it.getToken();
-            }
-            return null;
-        }).toString();
-        Set<Survey> surveys = surveyRepository.findByToken(token);
-        return surveys.stream().map(survey -> GetSurveyResponse.builder().term(survey.getTerm()).apartmentType(survey.getApartmentType()).city(survey.getCity()).minArea(survey.getMinArea()).maxArea(survey.getMaxArea()).minBudget(survey.getMinBudget()).maxBudget(survey.getMaxBudget()).build()).collect(Collectors.toSet());
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) connectedUser;
+        Optional<User> currentUser = userRepository.findByEmail(authenticationToken.getName());
+        if (currentUser.isPresent()) {
+            Set<SurveyAnswers> surveyAnswers = surveyRepository.findByUser(currentUser.get());
+            return surveyAnswers.stream().map(answers -> GetSurveyResponse.builder().term(answers.getTerm()).apartmentTypes(answers.getApartmentType()).city(answers.getCity()).minArea(answers.getMinArea()).maxArea(answers.getMaxArea()).minBudget(answers.getMinBudget()).maxBudget(answers.getMaxBudget()).build()).collect(Collectors.toSet());
+        } else {
+            throw new UserNotFoundException("User not found by email");
+        }
     }
 }

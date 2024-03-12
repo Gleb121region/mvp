@@ -20,7 +20,7 @@ public class SurveyController {
         return surveyService.findSurveyByToken(connectedUser);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/fill_out")
     public void createSurvey(Principal connectedUser, @RequestBody CreateSurveyRequest request) {
         surveyService.saveSurvey(connectedUser, request);
     }
