@@ -11,9 +11,9 @@ public record AnnouncementResponse(
         Integer id,
         Integer floor,
         Integer floorsCount,
-        Double totalMeters,
+        Integer totalMeters,
         ApartmentType apartmentType,
-        Double pricePerMonth,
+        Integer pricePerMonth,
         String address,
         @Nullable
         String underground,

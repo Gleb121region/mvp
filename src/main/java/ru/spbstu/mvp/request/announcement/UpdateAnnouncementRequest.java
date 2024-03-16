@@ -26,11 +26,11 @@ public record UpdateAnnouncementRequest(
         @NotNull
         Integer floorsCount,
         @NotNull
-        Double totalMeters,
+        Integer totalMeters,
         @NotNull
         ApartmentType apartmentType,
         @NotNull
-        Double pricePerMonth,
+        Integer pricePerMonth,
         @NotBlank
         @Size(max = 10_000)
         String description,

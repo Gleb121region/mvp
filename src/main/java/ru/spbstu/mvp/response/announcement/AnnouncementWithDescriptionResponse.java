@@ -10,9 +10,9 @@ import java.util.Set;
 public record AnnouncementWithDescriptionResponse(Integer id,
                                                   Integer floor,
                                                   Integer floorsCount,
-                                                  Double totalMeters,
+                                                  Integer totalMeters,
                                                   ApartmentType apartmentType,
-                                                  Double pricePerMonth,
+                                                  Integer pricePerMonth,
                                                   String address,
                                                   @Nullable
                                                   String underground,

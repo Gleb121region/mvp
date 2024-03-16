@@ -57,10 +57,10 @@ public class Announcement {
     private Integer floorsCount;
 
     @NotNull
-    private Double totalMeters;
+    private Integer totalMeters;
 
     @NotNull
-    private Double pricePerMonth;
+    private Integer pricePerMonth;
 
     @NotBlank
     @Size(max = 10_000)

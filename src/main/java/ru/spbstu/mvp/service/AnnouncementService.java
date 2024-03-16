@@ -68,6 +68,12 @@ public class AnnouncementService {
         if (request.minPricePerMonth() != null) {
             predicates.add(criteriaBuilder.greaterThanOrEqualTo(announcement.get("pricePerMonth"), request.minPricePerMonth()));
         }
+        if (request.maxPricePerMonth() != null) {
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(announcement.get("totalMeters"), request.maxArea()));
+        }
+        if (request.minPricePerMonth() != null) {
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(announcement.get("totalMeters"), request.minArea()));
+        }
         if (request.isRefrigerator() != null) {
             predicates.add(criteriaBuilder.equal(announcement.get("isRefrigerator"), request.isRefrigerator()));
         }

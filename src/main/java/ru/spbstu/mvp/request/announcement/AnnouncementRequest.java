@@ -20,10 +20,16 @@ public record AnnouncementRequest(
         Set<ApartmentType> apartmentTypes,
         @Nullable
         @Max(100_000_000)
-        Double maxPricePerMonth,
+        Integer maxPricePerMonth,
         @Nullable
         @Min(0)
-        Double minPricePerMonth,
+        Integer minPricePerMonth,
+        @Nullable
+        @Max(100_000_000)
+        Integer maxArea,
+        @Nullable
+        @Min(0)
+        Integer minArea,
         @Nullable
         Boolean isRefrigerator,
         @Nullable
