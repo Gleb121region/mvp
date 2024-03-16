@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.spbstu.mvp.request.announcement.AnnouncementRequest;
 import ru.spbstu.mvp.request.announcement.CreateAnnouncementRequest;
 import ru.spbstu.mvp.request.announcement.UpdateAnnouncementRequest;
-import ru.spbstu.mvp.response.flat.AnnouncementResponse;
-import ru.spbstu.mvp.response.flat.AnnouncementWithDescriptionResponse;
+import ru.spbstu.mvp.response.announcement.AnnouncementResponse;
+import ru.spbstu.mvp.response.announcement.AnnouncementWithDescriptionResponse;
 import ru.spbstu.mvp.service.AnnouncementService;
 
 import java.util.Set;
@@ -23,25 +23,25 @@ public class AnnouncementController {
 
     @Operation(summary = "Get a list of announcements")
     @GetMapping
-    public Set<AnnouncementResponse> getFewFlats(@Parameter(description = "Announcement request criteria") @Param("request") AnnouncementRequest request, @Parameter(description = "Maximum number of announcements to return") @RequestParam(name = "limit") Integer limit, @Parameter(description = "Offset for pagination") @RequestParam(name = "offset") Integer offset) {
+    public Set<AnnouncementResponse> getFewAnnouncements(@Parameter(description = "Announcement request criteria") @Param("request") AnnouncementRequest request, @Parameter(description = "Maximum number of announcements to return") @RequestParam(name = "limit") Integer limit, @Parameter(description = "Offset for pagination") @RequestParam(name = "offset") Integer offset) {
         return announcementService.getAnnouncementsInfo(request, limit, offset);
     }
 
     @Operation(summary = "Get detailed information about an announcement")
-    @GetMapping("/{flatId}")
-    public AnnouncementWithDescriptionResponse getInfAboutFlat(@Parameter(description = "ID of the announcement") @PathVariable Integer flatId) {
-        return announcementService.getAnnouncementInfo(flatId);
+    @GetMapping("/{announcementId}")
+    public AnnouncementWithDescriptionResponse getInfAboutAnnouncement(@Parameter(description = "ID of the announcement") @PathVariable Integer announcementId) {
+        return announcementService.getAnnouncementInfo(announcementId);
     }
 
     @Operation(summary = "Create a new announcement")
     @PostMapping
-    public Integer createFlatFromRequestWithoutPhoto(@RequestBody CreateAnnouncementRequest request) {
+    public Integer createAnnouncementFromRequestWithoutPhoto(@RequestBody CreateAnnouncementRequest request) {
         return announcementService.createAnnouncementFromRequestWithoutPhoto(request);
     }
 
     @Operation(summary = "Update an existing announcement")
     @PutMapping
-    public void updateFlatFromRequestWithoutPhoto(@RequestBody UpdateAnnouncementRequest request) {
+    public void updateAnnouncementFromRequestWithoutPhoto(@RequestBody UpdateAnnouncementRequest request) {
         announcementService.updateAnnouncementByAnnouncementId(request);
     }
 }

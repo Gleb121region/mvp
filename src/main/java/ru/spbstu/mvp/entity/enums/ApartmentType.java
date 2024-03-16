@@ -1,4 +1,4 @@
-package ru.spbstu.mvp.entity.enums.interview;
+package ru.spbstu.mvp.entity.enums;
 
 public enum ApartmentType {
     STUDIO,

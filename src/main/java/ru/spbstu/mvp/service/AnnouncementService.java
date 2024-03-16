@@ -21,8 +21,8 @@ import ru.spbstu.mvp.repository.AnnouncementRepository;
 import ru.spbstu.mvp.request.announcement.AnnouncementRequest;
 import ru.spbstu.mvp.request.announcement.CreateAnnouncementRequest;
 import ru.spbstu.mvp.request.announcement.UpdateAnnouncementRequest;
-import ru.spbstu.mvp.response.flat.AnnouncementResponse;
-import ru.spbstu.mvp.response.flat.AnnouncementWithDescriptionResponse;
+import ru.spbstu.mvp.response.announcement.AnnouncementResponse;
+import ru.spbstu.mvp.response.announcement.AnnouncementWithDescriptionResponse;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class AnnouncementService {
             predicates.add(criteriaBuilder.equal(announcement.get("district"), request.district()));
         }
         if (request.apartmentTypes() != null) {
-            predicates.add(announcement.get("apartmentTypes").in(request.apartmentTypes()));
+            predicates.add(announcement.get("apartmentType").in(request.apartmentTypes()));
         }
         if (request.maxPricePerMonth() != null) {
             predicates.add(criteriaBuilder.lessThanOrEqualTo(announcement.get("pricePerMonth"), request.maxPricePerMonth()));

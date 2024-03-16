@@ -1,10 +1,11 @@
 package ru.spbstu.mvp.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
-import ru.spbstu.mvp.entity.enums.interview.City;
-import ru.spbstu.mvp.entity.enums.interview.Term;
+import ru.spbstu.mvp.entity.enums.ApartmentType;
+import ru.spbstu.mvp.entity.enums.City;
+import ru.spbstu.mvp.entity.enums.Term;
 
 import java.util.Set;
 
@@ -33,8 +34,20 @@ public class SurveyAnswers {
 
     private Integer minArea;
     private Integer maxArea;
+
     private Integer minBudget;
     private Integer maxBudget;
+
+    private Boolean isRefrigerator;
+    private Boolean isWashingMachine;
+    private Boolean isTV;
+    private Boolean isShowerCubicle;
+    private Boolean isBathtub;
+    private Boolean isFurnitureRoom;
+    private Boolean isFurnitureKitchen;
+    private Boolean isDishwasher;
+    private Boolean isAirConditioning;
+    private Boolean isInternet;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")

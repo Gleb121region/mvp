@@ -3,9 +3,9 @@ package ru.spbstu.mvp.response.survey;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
-import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
-import ru.spbstu.mvp.entity.enums.interview.City;
-import ru.spbstu.mvp.entity.enums.interview.Term;
+import ru.spbstu.mvp.entity.enums.ApartmentType;
+import ru.spbstu.mvp.entity.enums.City;
+import ru.spbstu.mvp.entity.enums.Term;
 
 import java.util.Set;
 
@@ -28,6 +28,26 @@ public record GetSurveyResponse(
         Integer minBudget,
         @NotBlank
         @Min(100_000_000)
-        Integer maxBudget
+        Integer maxBudget,
+        @NotBlank
+        Boolean isRefrigerator,
+        @NotBlank
+        Boolean isWashingMachine,
+        @NotBlank
+        Boolean isTV,
+        @NotBlank
+        Boolean isShowerCubicle,
+        @NotBlank
+        Boolean isBathtub,
+        @NotBlank
+        Boolean isFurnitureRoom,
+        @NotBlank
+        Boolean isFurnitureKitchen,
+        @NotBlank
+        Boolean isDishwasher,
+        @NotBlank
+        Boolean isAirConditioning,
+        @NotBlank
+        Boolean isInternet
 ) {
 }

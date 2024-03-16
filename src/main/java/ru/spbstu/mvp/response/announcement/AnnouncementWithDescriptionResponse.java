@@ -1,8 +1,8 @@
-package ru.spbstu.mvp.response.flat;
+package ru.spbstu.mvp.response.announcement;
 
 import lombok.Builder;
 import org.springframework.lang.Nullable;
-import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
+import ru.spbstu.mvp.entity.enums.ApartmentType;
 
 import java.util.Set;
 

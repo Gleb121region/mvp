@@ -9,9 +9,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.lang.Nullable;
-import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
-import ru.spbstu.mvp.entity.enums.interview.City;
-import ru.spbstu.mvp.entity.enums.interview.Term;
+import ru.spbstu.mvp.entity.enums.ApartmentType;
+import ru.spbstu.mvp.entity.enums.City;
+import ru.spbstu.mvp.entity.enums.Term;
 
 import java.time.OffsetDateTime;
 import java.util.Set;

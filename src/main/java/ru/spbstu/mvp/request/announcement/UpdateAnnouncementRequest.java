@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
-import ru.spbstu.mvp.entity.enums.interview.City;
+import ru.spbstu.mvp.entity.enums.ApartmentType;
+import ru.spbstu.mvp.entity.enums.City;
 
 @Builder
 public record UpdateAnnouncementRequest(

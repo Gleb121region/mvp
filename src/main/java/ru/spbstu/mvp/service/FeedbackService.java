@@ -16,7 +16,7 @@ import ru.spbstu.mvp.repository.AnnouncementRepository;
 import ru.spbstu.mvp.repository.FeedbackRepository;
 import ru.spbstu.mvp.repository.UserRepository;
 import ru.spbstu.mvp.request.feedback.CreateFeedbackRequest;
-import ru.spbstu.mvp.response.flat.AnnouncementResponse;
+import ru.spbstu.mvp.response.announcement.AnnouncementResponse;
 
 import java.security.Principal;
 import java.util.Optional;

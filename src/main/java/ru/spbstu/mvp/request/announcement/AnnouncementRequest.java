@@ -4,8 +4,8 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Builder;
 import org.springframework.lang.Nullable;
-import ru.spbstu.mvp.entity.enums.interview.ApartmentType;
-import ru.spbstu.mvp.entity.enums.interview.City;
+import ru.spbstu.mvp.entity.enums.ApartmentType;
+import ru.spbstu.mvp.entity.enums.City;
 
 import java.util.Set;
 
