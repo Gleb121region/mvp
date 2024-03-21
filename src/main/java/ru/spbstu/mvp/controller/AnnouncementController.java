@@ -12,6 +12,7 @@ import ru.spbstu.mvp.response.announcement.AnnouncementResponse;
 import ru.spbstu.mvp.response.announcement.AnnouncementWithDescriptionResponse;
 import ru.spbstu.mvp.service.AnnouncementService;
 
+import java.security.Principal;
 import java.util.Set;
 
 @RestController
@@ -23,8 +24,8 @@ public class AnnouncementController {
 
     @Operation(summary = "Get a list of announcements")
     @GetMapping
-    public Set<AnnouncementResponse> getFewAnnouncements(@Parameter(description = "Announcement request criteria") @Param("request") AnnouncementRequest request, @Parameter(description = "Maximum number of announcements to return") @RequestParam(name = "limit") Integer limit, @Parameter(description = "Offset for pagination") @RequestParam(name = "offset") Integer offset) {
-        return announcementService.getAnnouncementsInfo(request, limit, offset);
+    public Set<AnnouncementResponse> getFewAnnouncements(@Parameter(description = "Announcement request criteria") @Param("request") AnnouncementRequest request, @Parameter(description = "Maximum number of announcements to return") @RequestParam(name = "limit") Integer limit, @Parameter(description = "Offset for pagination") @RequestParam(name = "offset") Integer offset, Principal connectedUser) {
+        return announcementService.getAnnouncementsInfo(request, limit, offset, connectedUser);
     }
 
     @Operation(summary = "Get detailed information about an announcement")
