@@ -168,9 +168,9 @@ public class AnnouncementService {
         boolean isLiked = false;
         if (optionalUser.isPresent()) {
             User currentUser = optionalUser.get();
-            Feedback feedback = feedbackRepository.findByAnnouncementAndUser(announcement, currentUser);
-            if (feedback != null) {
-                FeedbackType feedbackType = feedback.getFeedbackType();
+            Optional<Feedback> optionalFeedback = feedbackRepository.findByAnnouncementAndUser(announcement, currentUser);
+            if (optionalFeedback.isPresent()) {
+                FeedbackType feedbackType = optionalFeedback.get().getFeedbackType();
                 if (feedbackType.equals(FeedbackType.LIKE)) {
                     isLiked = true;
                 }

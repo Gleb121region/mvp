@@ -22,9 +22,9 @@ public class FeedbackController {
         return feedbackService.getLikeFeedbacks(connectedUser);
     }
 
-    @PostMapping("/create")
-    public void createFeedback(CreateFeedbackRequest request, Principal connectedUser) {
-        feedbackService.createFeedback(request, connectedUser);
+    @PutMapping("/assess")
+    public void createFeedback(@RequestBody CreateFeedbackRequest request, Principal connectedUser) {
+        feedbackService.assessFeedback(request, connectedUser);
     }
 
 }

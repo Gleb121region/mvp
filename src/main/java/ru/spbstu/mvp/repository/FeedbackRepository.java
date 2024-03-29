@@ -12,6 +12,7 @@ import ru.spbstu.mvp.entity.User;
 import ru.spbstu.mvp.entity.enums.FeedbackType;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -19,7 +20,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
 
     Set<Feedback> findByFeedbackTypeAndUser(@NonNull FeedbackType feedbackType, @NonNull User user);
 
-    Feedback findByAnnouncementAndUser(@NonNull Announcement announcement, @NotNull User user);
+    Optional<Feedback> findByAnnouncementAndUser(@NonNull Announcement announcement, @NotNull User user);
 
     @Modifying
     @Query("DELETE FROM Feedback f WHERE f.createdAt < :cutoffDate")

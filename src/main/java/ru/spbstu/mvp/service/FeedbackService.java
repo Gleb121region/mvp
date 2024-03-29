@@ -1,6 +1,7 @@
 package ru.spbstu.mvp.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,24 +34,31 @@ public class FeedbackService {
     private final UserRepository userRepository;
     private final AnnouncementPhotoRepository announcementPhotoRepository;
 
-    @Transactional
-    public void createFeedback(CreateFeedbackRequest request, Principal connectedUser) {
+    @Modifying
+    public void assessFeedback(CreateFeedbackRequest request, Principal connectedUser) {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) connectedUser;
         String userEmail = authenticationToken.getName();
 
         Optional<User> optionalUser = userRepository.findByEmail(userEmail);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            Optional<Announcement> optionalFlat = announcementRepository.findById(request.flatId());
-            if (optionalFlat.isPresent()) {
-                Feedback feedback = Feedback.builder()
-                        .feedbackType(request.feedbackType()).announcement(optionalFlat.get())
-                        .user(user)
-                        .build();
+
+            Optional<Announcement> optionalAnnouncement = announcementRepository.findById(request.announcementId());
+            if (optionalAnnouncement.isPresent()) {
+                Announcement announcement = optionalAnnouncement.get();
+
+                Optional<Feedback> optionalFeedback = feedbackRepository.findByAnnouncementAndUser(announcement, user);
+                Feedback feedback;
+                FeedbackType type = request.feedbackType();
+                if (optionalFeedback.isPresent()) {
+                    feedback = optionalFeedback.get();
+                    feedback.setFeedbackType(type);
+                } else {
+                    feedback = Feedback.builder().feedbackType(type).announcement(announcement).user(user).build();
+                }
                 feedbackRepository.save(feedback);
             } else {
                 throw new AnnouncementNotFoundException("Announcement not found");
-
             }
         } else {
             throw new UserNotFoundException("User not found");
