@@ -11,6 +11,7 @@ import org.springframework.lang.Nullable;
 import ru.spbstu.mvp.entity.enums.Gender;
 
 import java.util.Date;
+import java.util.Set;
 
 @Builder
 public record UserResponse(
@@ -21,7 +22,7 @@ public record UserResponse(
         @Pattern(regexp = "^[a-zA-Z]+$|^[а-яА-Я]+$")
         String lastname,
         @Nullable
-        String aboutMe,
+        String about,
         @Nullable
         @Enumerated(EnumType.STRING)
         Gender gender,
@@ -32,6 +33,8 @@ public record UserResponse(
         String phone,
         @NotBlank
         @Email
-        String email
+        String email,
+        @Nullable
+        Set<String> photosUrl
 ) {
 }

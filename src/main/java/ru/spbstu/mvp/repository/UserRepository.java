@@ -37,7 +37,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                     u.aboutMe = :#{#request.about()},
                     u.gender = :#{#request.gender()},
                     u.birthdayDate = :#{#request.birthdayDate()},
-                    u.email = :#{#request.email()},
                     u.phone = :#{#request.phone()}
                     WHERE u.id = :userId
             """)
