@@ -15,6 +15,7 @@ import java.util.Set;
 
 @Builder
 public record UserResponse(
+        Integer userId,
         @NotBlank
         @Pattern(regexp = "^[a-zA-Z]+$|^[а-яА-Я]+$")
         String firstname,

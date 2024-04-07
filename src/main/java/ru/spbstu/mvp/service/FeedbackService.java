@@ -1,6 +1,9 @@
 package ru.spbstu.mvp.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import ru.spbstu.mvp.request.feedback.CreateFeedbackRequest;
 import ru.spbstu.mvp.response.announcement.AnnouncementResponse;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -66,21 +70,31 @@ public class FeedbackService {
     }
 
     @Transactional(readOnly = true)
-    public Set<AnnouncementResponse> getLikeFeedbacks(Principal connectedUser) {
+    public Set<AnnouncementResponse> getLikeFeedbacks(Principal connectedUser, int limit, int offset) {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) connectedUser;
         String userEmail = authenticationToken.getName();
 
         Optional<User> optionalUser = userRepository.findByEmail(userEmail);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            Set<Feedback> likedFeedbacks = feedbackRepository.findByFeedbackTypeAndUser(FeedbackType.LIKE, user);
+            Pageable pageable = PageRequest.of(offset, limit);
+            Page<Feedback> likedFeedbacksPage = feedbackRepository.findByFeedbackTypeAndUser(FeedbackType.LIKE, user, pageable);
+            List<Feedback> likedFeedbacks = likedFeedbacksPage.getContent();
             Set<Announcement> likedAnnouncements = likedFeedbacks.stream().map(Feedback::getAnnouncement).collect(Collectors.toSet());
-            return likedAnnouncements.stream().map(announcement -> AnnouncementResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).apartmentType(announcement.getApartmentType()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcementPhotoRepository.findPhotosByAnnouncementId(announcement.getId()).stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet()))
-                            .build()
-            ).collect(Collectors.toSet());
+            return likedAnnouncements.stream().map(announcement -> AnnouncementResponse.builder()
+                            .id(announcement.getId())
+                            .floor(announcement.getFloor())
+                            .floorsCount(announcement.getFloorsCount())
+                            .totalMeters(announcement.getTotalMeters())
+                            .apartmentType(announcement.getApartmentType())
+                            .pricePerMonth(announcement.getPricePerMonth())
+                            .address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber())
+                            .underground(announcement.getUnderground())
+                            .photoUrls(announcementPhotoRepository.findPhotosByAnnouncementId(announcement.getId()).stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet()))
+                            .build())
+                    .collect(Collectors.toSet());
         } else {
             throw new UserNotFoundException("User not found");
         }
     }
-
 }

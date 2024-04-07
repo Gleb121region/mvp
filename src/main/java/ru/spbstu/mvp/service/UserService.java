@@ -53,6 +53,7 @@ public class UserService {
         {
             Set<String> photosUrl = user.getPhotos().stream().map(UserPhoto::getPhotoUrl).collect(Collectors.toSet());
             return UserResponse.builder()
+                    .userId(user.getId())
                     .firstname(user.getFirstname())
                     .lastname(user.getLastname())
                     .about(user.getAboutMe())

@@ -1,5 +1,6 @@
 package ru.spbstu.mvp.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.spbstu.mvp.request.feedback.CreateFeedbackRequest;
@@ -18,8 +19,8 @@ public class FeedbackController {
 
     @GetMapping("/liked")
     @ResponseBody
-    public Set<AnnouncementResponse> getLikedFeedbackByUser(Principal connectedUser) {
-        return feedbackService.getLikeFeedbacks(connectedUser);
+    public Set<AnnouncementResponse> getLikedFeedbackByUser(Principal connectedUser, @Parameter(description = "Maximum number of announcements to return") @RequestParam(name = "limit") Integer limit, @Parameter(description = "Offset for pagination") @RequestParam(name = "offset") Integer offset) {
+        return feedbackService.getLikeFeedbacks(connectedUser, limit, offset);
     }
 
     @PutMapping("/assess")
