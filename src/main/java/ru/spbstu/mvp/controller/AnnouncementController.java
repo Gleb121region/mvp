@@ -30,8 +30,8 @@ public class AnnouncementController {
 
     @Operation(summary = "Get detailed information about an announcement")
     @GetMapping("/{announcementId}")
-    public AnnouncementWithDescriptionResponse getInfAboutAnnouncement(@Parameter(description = "ID of the announcement") @PathVariable Integer announcementId) {
-        return announcementService.getAnnouncementInfo(announcementId);
+    public AnnouncementWithDescriptionResponse getInfAboutAnnouncement(@Parameter(description = "ID of the announcement") @PathVariable Integer announcementId, Principal connectedUser) {
+        return announcementService.getAnnouncementInfo(announcementId, connectedUser);
     }
 
     @Operation(summary = "Create a new announcement")

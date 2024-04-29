@@ -17,5 +17,7 @@ public record AnnouncementResponse(
         String address,
         @Nullable
         String underground,
-        Set<String> photoUrls) {
+        Set<String> photoUrls,
+        Boolean isLikedByUser
+        ) {
 }

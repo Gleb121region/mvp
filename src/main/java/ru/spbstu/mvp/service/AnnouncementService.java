@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -45,9 +46,28 @@ public class AnnouncementService {
     private final FeedbackRepository feedbackRepository;
     private final UserRepository userRepository;
 
-
     @PersistenceContext
     private EntityManager entityManager;
+
+    private Boolean checkIfLikedByUser(Announcement announcement, Principal connectedUser) {
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) connectedUser;
+        String userEmail = authenticationToken.getName();
+        Optional<User> optionalUser = userRepository.findByEmail(userEmail);
+        boolean isLiked = false;
+        if (optionalUser.isPresent()) {
+            User currentUser = optionalUser.get();
+            Optional<Feedback> optionalFeedback = feedbackRepository.findByAnnouncementAndUser(announcement, currentUser);
+            if (optionalFeedback.isPresent()) {
+                FeedbackType feedbackType = optionalFeedback.get().getFeedbackType();
+                if (feedbackType.equals(FeedbackType.LIKE)) {
+                    isLiked = true;
+                }
+            }
+        } else {
+            throw new UserNotFoundException("User not found");
+        }
+        return isLiked;
+    }
 
     private Page<Announcement> findAnnouncementsByParams(AnnouncementRequest request, Pageable pageable, Principal connectedUser) {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) connectedUser;
@@ -157,35 +177,57 @@ public class AnnouncementService {
         int offsetValue = offset != null ? offset : 0;
 
         Page<Announcement> announcements = findAnnouncementsByParams(request, PageRequest.of(offsetValue, limit), connectedUser);
-        return announcements.map(announcement -> AnnouncementResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).apartmentType(announcement.getApartmentType()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcement.getPhotos().stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet())).build()
-        ).stream().collect(Collectors.toSet());
-    }
-
-    private Boolean checkIfLikedByUser(Announcement announcement, Principal connectedUser) {
-        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) connectedUser;
-        String userEmail = authenticationToken.getName();
-        Optional<User> optionalUser = userRepository.findByEmail(userEmail);
-        boolean isLiked = false;
-        if (optionalUser.isPresent()) {
-            User currentUser = optionalUser.get();
-            Optional<Feedback> optionalFeedback = feedbackRepository.findByAnnouncementAndUser(announcement, currentUser);
-            if (optionalFeedback.isPresent()) {
-                FeedbackType feedbackType = optionalFeedback.get().getFeedbackType();
-                if (feedbackType.equals(FeedbackType.LIKE)) {
-                    isLiked = true;
-                }
-            }
-        } else {
-            throw new UserNotFoundException("User not found");
-        }
-        return isLiked;
+        return announcements.map(it ->
+        {
+            String address = it.getDistrict() + " " + it.getStreet() + " " + it.getHouseNumber();
+            Stream<String> stringStream = it.getPhotos().stream().map(AnnouncementPhoto::getPhotoUrl);
+            return AnnouncementResponse.builder()
+                    .id(it.getId())
+                    .floor(it.getFloor())
+                    .floorsCount(it.getFloorsCount())
+                    .totalMeters(it.getTotalMeters())
+                    .apartmentType(it.getApartmentType())
+                    .pricePerMonth(it.getPricePerMonth())
+                    .address(address)
+                    .underground(it.getUnderground())
+                    .photoUrls(stringStream.collect(Collectors.toSet()))
+                    .isLikedByUser(checkIfLikedByUser(it, connectedUser))
+                    .build();
+        }).stream().collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)
-    public AnnouncementWithDescriptionResponse getAnnouncementInfo(int announcementId) {
-        return announcementRepository.findByIdWithPhotos(announcementId).map(announcement -> AnnouncementWithDescriptionResponse.builder().id(announcement.getId()).floor(announcement.getFloor()).floorsCount(announcement.getFloorsCount()).totalMeters(announcement.getTotalMeters()).apartmentType(announcement.getApartmentType()).pricePerMonth(announcement.getPricePerMonth()).address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber()).underground(announcement.getUnderground()).photoUrls(announcement.getPhotos().stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet())).description(announcement.getDescription())
-                                .build()
-        ).orElse(null);
+    public AnnouncementWithDescriptionResponse getAnnouncementInfo(int announcementId, Principal connectedUser) {
+        return announcementRepository.findByIdWithPhotos(announcementId).map(it ->
+        {
+            String address = it.getDistrict() + " " + it.getStreet() + " " + it.getHouseNumber();
+            Stream<String> stringStream = it.getPhotos().stream().map(AnnouncementPhoto::getPhotoUrl);
+            return AnnouncementWithDescriptionResponse.builder()
+                    .id(it.getId())
+                    .city(it.getCity())
+                    .floor(it.getFloor())
+                    .floorsCount(it.getFloorsCount())
+                    .totalMeters(it.getTotalMeters())
+                    .apartmentType(it.getApartmentType())
+                    .pricePerMonth(it.getPricePerMonth())
+                    .address(address)
+                    .underground(it.getUnderground())
+                    .photoUrls(stringStream.collect(Collectors.toSet()))
+                    .description(it.getDescription())
+                    .isRefrigerator(it.getIsRefrigerator())
+                    .isWashingMachine(it.getIsWashingMachine())
+                    .isTV(it.getIsTV())
+                    .isShowerCubicle(it.getIsShowerCubicle())
+                    .isBathtub(it.getIsBathtub())
+                    .isFurnitureRoom(it.getIsFurnitureRoom())
+                    .isFurnitureKitchen(it.getIsFurnitureKitchen())
+                    .isDishwasher(it.getIsDishwasher())
+                    .isAirConditioning(it.getIsAirConditioning())
+                    .isInternet(it.getIsInternet())
+                    .isHide(it.getIsHide())
+                    .isLikedByUser(checkIfLikedByUser(it, connectedUser))
+                    .build();
+        }).orElse(null);
     }
 
     @Transactional

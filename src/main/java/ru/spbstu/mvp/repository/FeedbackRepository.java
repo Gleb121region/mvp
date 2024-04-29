@@ -16,7 +16,6 @@ import ru.spbstu.mvp.entity.enums.FeedbackType;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
@@ -31,4 +30,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
     @Query("DELETE FROM Feedback f WHERE f.createdAt < :cutoffDate")
     void deleteOldFeedback(OffsetDateTime cutoffDate);
 
+    @Modifying
+    @Query("delete from Feedback f where f.announcement = :announcement")
+    void deleteByAnnouncement(@Param("announcement") Announcement announcement);
 }

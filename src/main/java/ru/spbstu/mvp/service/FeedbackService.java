@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -38,7 +39,7 @@ public class FeedbackService {
     private final UserRepository userRepository;
     private final AnnouncementPhotoRepository announcementPhotoRepository;
 
-    @Modifying
+    @Transactional
     public void assessFeedback(CreateFeedbackRequest request, Principal connectedUser) {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) connectedUser;
         String userEmail = authenticationToken.getName();
@@ -52,15 +53,25 @@ public class FeedbackService {
                 Announcement announcement = optionalAnnouncement.get();
 
                 Optional<Feedback> optionalFeedback = feedbackRepository.findByAnnouncementAndUser(announcement, user);
-                Feedback feedback;
                 FeedbackType type = request.feedbackType();
                 if (optionalFeedback.isPresent()) {
-                    feedback = optionalFeedback.get();
-                    feedback.setFeedbackType(type);
+                    if (type.equals(FeedbackType.DEFAULT)) {
+                        feedbackRepository.deleteByAnnouncement(announcement);
+                    } else {
+                        Feedback feedback = optionalFeedback.get();
+                        feedback.setFeedbackType(type);
+                        feedbackRepository.save(feedback);
+                    }
                 } else {
-                    feedback = Feedback.builder().feedbackType(type).announcement(announcement).user(user).build();
+                    if (!type.equals(FeedbackType.DEFAULT)) {
+                        Feedback feedback = Feedback.builder()
+                                .feedbackType(type)
+                                .announcement(announcement)
+                                .user(user)
+                                .build();
+                        feedbackRepository.save(feedback);
+                    }
                 }
-                feedbackRepository.save(feedback);
             } else {
                 throw new AnnouncementNotFoundException("Announcement not found");
             }
@@ -81,17 +92,25 @@ public class FeedbackService {
             Page<Feedback> likedFeedbacksPage = feedbackRepository.findByFeedbackTypeAndUser(FeedbackType.LIKE, user, pageable);
             List<Feedback> likedFeedbacks = likedFeedbacksPage.getContent();
             Set<Announcement> likedAnnouncements = likedFeedbacks.stream().map(Feedback::getAnnouncement).collect(Collectors.toSet());
-            return likedAnnouncements.stream().map(announcement -> AnnouncementResponse.builder()
-                            .id(announcement.getId())
-                            .floor(announcement.getFloor())
-                            .floorsCount(announcement.getFloorsCount())
-                            .totalMeters(announcement.getTotalMeters())
-                            .apartmentType(announcement.getApartmentType())
-                            .pricePerMonth(announcement.getPricePerMonth())
-                            .address(announcement.getDistrict() + " " + announcement.getStreet() + " " + announcement.getHouseNumber())
-                            .underground(announcement.getUnderground())
-                            .photoUrls(announcementPhotoRepository.findPhotosByAnnouncementId(announcement.getId()).stream().map(AnnouncementPhoto::getPhotoUrl).collect(Collectors.toSet()))
-                            .build())
+            return likedAnnouncements.stream().map(it ->
+                    {
+                        Integer id = it.getId();
+                        String address = it.getDistrict() + " " + it.getStreet() + " " + it.getHouseNumber();
+                        Set<AnnouncementPhoto> photos = announcementPhotoRepository.findPhotosByAnnouncementId(id);
+                        Stream<String> stream = photos.stream().map(AnnouncementPhoto::getPhotoUrl);
+                        return AnnouncementResponse.builder()
+                                .id(id)
+                                .floor(it.getFloor())
+                                .floorsCount(it.getFloorsCount())
+                                .totalMeters(it.getTotalMeters())
+                                .apartmentType(it.getApartmentType())
+                                .pricePerMonth(it.getPricePerMonth())
+                                .address(address)
+                                .underground(it.getUnderground())
+                                .photoUrls(stream.collect(Collectors.toSet()))
+                                .isLikedByUser(true)
+                                .build();
+                    })
                     .collect(Collectors.toSet());
         } else {
             throw new UserNotFoundException("User not found");
