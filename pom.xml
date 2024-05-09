@@ -11,8 +11,8 @@
     <groupId>ru.spbstu</groupId>
     <artifactId>mvp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>flat-rent-service</name>
-    <description>flat rent service</description>
+    <name>announcement-rent-service</name>
+    <description>announcement rent service</description>
     <properties>
         <java.version>21</java.version>
     </properties>
@@ -29,11 +29,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
+            <version>42.7.1</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -80,6 +86,13 @@
             <artifactId>spring-data-redis</artifactId>
             <version>3.1.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.backblaze.b2</groupId>
+            <artifactId>b2-sdk-httpclient</artifactId>
+            <version>6.1.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

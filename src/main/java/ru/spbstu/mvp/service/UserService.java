@@ -5,12 +5,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.spbstu.mvp.entity.User;
+import ru.spbstu.mvp.entity.UserPhoto;
 import ru.spbstu.mvp.repository.UserRepository;
 import ru.spbstu.mvp.request.user.ChangePasswordRequest;
 import ru.spbstu.mvp.request.user.UserUpdateRequest;
 import ru.spbstu.mvp.response.user.UserResponse;
 
 import java.security.Principal;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +22,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
 
-    private static User getUser(UsernamePasswordAuthenticationToken connectedUser) {
+    public static User getUser(UsernamePasswordAuthenticationToken connectedUser) {
         return (User) connectedUser.getPrincipal();
     }
 
@@ -40,7 +43,6 @@ public class UserService {
     }
 
     public void changeInfoAboutUser(UserUpdateRequest request, Principal connectedUser) {
-        System.out.println(request.toString());
         User user = getUser((UsernamePasswordAuthenticationToken) connectedUser);
         repository.updateUser(user.getId(), request);
     }
@@ -48,16 +50,20 @@ public class UserService {
     public UserResponse getInfoAboutUser(Principal connectedUser) {
         User currentUser = getUser((UsernamePasswordAuthenticationToken) connectedUser);
         return repository.findUserById(currentUser.getId()).map(user ->
-                UserResponse.builder()
-                        .firstname(user.getFirstname())
-                        .lastname(user.getLastname())
-                        .aboutMe(user.getAboutMe())
-                        .gender(user.getGender())
-                        .birthdayDate(user.getBirthdayDate())
-                        .phone(user.getPhone())
-                        .linkVK(user.getLinkVK())
-                        .email(user.getEmail())
-                        .build()).orElse(null);
+        {
+            Set<String> photosUrl = user.getPhotos().stream().map(UserPhoto::getPhotoUrl).collect(Collectors.toSet());
+            return UserResponse.builder()
+                    .userId(user.getId())
+                    .firstname(user.getFirstname())
+                    .lastname(user.getLastname())
+                    .about(user.getAboutMe())
+                    .gender(user.getGender())
+                    .birthdayDate(user.getBirthdayDate())
+                    .phone(user.getPhone())
+                    .email(user.getEmail())
+                    .photosUrl(photosUrl)
+                    .build();
+        }).orElse(null);
     }
 
     public void deleteUser(Principal connectedUser) {

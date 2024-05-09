@@ -1,15 +1,16 @@
-package ru.spbstu.mvp.request.flat;
+package ru.spbstu.mvp.request.announcement;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import ru.spbstu.mvp.entity.enums.ApartmentType;
+import ru.spbstu.mvp.entity.enums.City;
 
-// todo:  нужно использовать в endpoint-е который будет создавать объявления
 @Builder
-public record CreateFlatRequest(
+public record CreateAnnouncementRequest(
         @NotBlank
-        String city,
+        City city,
         @NotBlank
         String underground,
         @NotBlank
@@ -23,11 +24,11 @@ public record CreateFlatRequest(
         @NotNull
         Integer floorsCount,
         @NotNull
-        Double totalMeters,
+        Integer totalMeters,
         @NotNull
-        Integer roomsCount,
+        ApartmentType apartmentType,
         @NotNull
-        Double pricePerMonth,
+        Integer pricePerMonth,
         @NotBlank
         @Size(max = 10_000)
         String description,

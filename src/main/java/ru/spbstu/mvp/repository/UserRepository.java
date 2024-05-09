@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                                 UPDATE User u SET
                                 u.password = :password
                                 WHERE u.id = :userId
-            """ )
+            """)
     void changeUserPassword(@Param("userId") Integer userId, @Param("password") String password);
 
     @Modifying
@@ -37,9 +37,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                     u.aboutMe = :#{#request.about()},
                     u.gender = :#{#request.gender()},
                     u.birthdayDate = :#{#request.birthdayDate()},
-                    u.email = :#{#request.email()},
-                    u.phone = :#{#request.phone()},
-                    u.linkVK = :#{#request.linkVK()}
+                    u.phone = :#{#request.phone()}
                     WHERE u.id = :userId
             """)
     void updateUser(@Param("userId") Integer userId, @Param("request") UserUpdateRequest request);

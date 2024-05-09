@@ -5,10 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,8 +15,10 @@ import ru.spbstu.mvp.entity.enums.Role;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -53,9 +52,6 @@ public class User implements UserDetails {
     @Size(max = 11)
     private String phone;
 
-    @Nullable
-    private String linkVK;
-
     @Email
     @Column(unique = true, nullable = false)
     private String email;
@@ -70,6 +66,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Feedback> feedbacks;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserPhoto> photos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

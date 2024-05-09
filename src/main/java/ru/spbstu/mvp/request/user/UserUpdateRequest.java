@@ -1,6 +1,5 @@
 package ru.spbstu.mvp.request.user;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import org.springframework.lang.Nullable;
@@ -23,11 +22,5 @@ public record UserUpdateRequest(
         Date birthdayDate,
         @Nullable
         @Size(max = 11)
-        String phone,
-        @Nullable
-        @Email
-        String email,
-        @Nullable
-        String linkVK
-) {
+        String phone) {
 }

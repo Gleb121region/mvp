@@ -13,10 +13,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static ru.spbstu.mvp.entity.enums.Permission.*;
-import static ru.spbstu.mvp.entity.enums.Role.*;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+import static ru.spbstu.mvp.entity.enums.Permission.*;
+import static ru.spbstu.mvp.entity.enums.Role.ADMIN;
+import static ru.spbstu.mvp.entity.enums.Role.MANAGER;
 
 @Configuration
 @EnableWebSecurity

@@ -4,31 +4,41 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.lang.Nullable;
+import ru.spbstu.mvp.entity.enums.ApartmentType;
+import ru.spbstu.mvp.entity.enums.City;
+import ru.spbstu.mvp.entity.enums.Term;
 
 import java.time.OffsetDateTime;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Flat {
+public class Announcement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "flat_id", nullable = false, updatable = false)
+    @Column(name = "announcement_id", nullable = false, updatable = false)
     private Integer id;
 
-    @NotBlank
-    private String city;
+    @Enumerated(EnumType.STRING)
+    private City city;
 
-    @NotBlank
+    @Enumerated(EnumType.STRING)
+    private ApartmentType apartmentType;
+
+    @Enumerated(EnumType.STRING)
+    private Term term;
+
+    @Nullable
     private String underground;
 
     @NotBlank
@@ -47,13 +57,10 @@ public class Flat {
     private Integer floorsCount;
 
     @NotNull
-    private Double totalMeters;
+    private Integer totalMeters;
 
     @NotNull
-    private Integer roomsCount;
-
-    @NotNull
-    private Double pricePerMonth;
+    private Integer pricePerMonth;
 
     @NotBlank
     @Size(max = 10_000)
@@ -89,12 +96,20 @@ public class Flat {
     @NotNull
     private Boolean isInternet;
 
-    @Column
+    @NotNull
+    @Builder.Default
+    private Boolean isHide = false;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    @Column
-    private OffsetDateTime updatedAt;
+    @UpdateTimestamp
+    private OffsetDateTime updatedAt = null;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flat", fetch = FetchType.EAGER)
-    private Set<Photo> photos;
+    @OneToMany(mappedBy = "announcement")
+    private Set<AnnouncementPhoto> photos;
+
+    @OneToMany(mappedBy = "announcement")
+    private Set<Feedback> feedbacks;
 }

@@ -5,7 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Permission {
-
+    OWNER_READ("owner:read"),
+    OWNER_UPDATE("owner:update"),
+    OWNER_CREATE("owner:create"),
+    OWNER_DELETE("owner:delete"),
     ADMIN_READ("admin:read"),
     ADMIN_UPDATE("admin:update"),
     ADMIN_CREATE("admin:create"),
