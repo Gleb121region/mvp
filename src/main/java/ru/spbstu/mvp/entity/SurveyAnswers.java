@@ -1,7 +1,6 @@
 package ru.spbstu.mvp.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import ru.spbstu.mvp.entity.enums.ApartmentType;
 import ru.spbstu.mvp.entity.enums.City;

@@ -19,5 +19,5 @@ public record AnnouncementResponse(
         String underground,
         Set<String> photoUrls,
         Boolean isLikedByUser
-        ) {
+) {
 }

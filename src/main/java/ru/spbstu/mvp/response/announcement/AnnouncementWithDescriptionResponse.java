@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Builder
 public record AnnouncementWithDescriptionResponse(Integer id,
-                                                  City city, 
+                                                  City city,
                                                   Integer floor,
                                                   Integer floorsCount,
                                                   Integer totalMeters,

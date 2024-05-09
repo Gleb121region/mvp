@@ -16,7 +16,6 @@ import ru.spbstu.mvp.exception.AnnouncementNotFoundException;
 import ru.spbstu.mvp.exception.PhotoUploadException;
 import ru.spbstu.mvp.repository.AnnouncementPhotoRepository;
 import ru.spbstu.mvp.repository.AnnouncementRepository;
-import ru.spbstu.mvp.request.announcement_photo.AnnouncementPhotoRequest;
 
 import java.io.File;
 import java.io.IOException;
