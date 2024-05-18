@@ -4,6 +4,7 @@ import lombok.Builder;
 import org.springframework.lang.Nullable;
 import ru.spbstu.mvp.entity.enums.ApartmentType;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Builder
@@ -19,5 +20,5 @@ public record AnnouncementResponse(
         String underground,
         Set<String> photoUrls,
         Boolean isLikedByUser
-) {
+) implements Serializable {
 }
