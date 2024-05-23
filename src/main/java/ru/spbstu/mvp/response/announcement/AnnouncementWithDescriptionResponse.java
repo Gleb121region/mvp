@@ -5,6 +5,7 @@ import org.springframework.lang.Nullable;
 import ru.spbstu.mvp.entity.enums.ApartmentType;
 import ru.spbstu.mvp.entity.enums.City;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Builder
@@ -31,5 +32,5 @@ public record AnnouncementWithDescriptionResponse(Integer id,
                                                   Boolean isInternet,
                                                   Boolean isHide,
                                                   Boolean isLikedByUser
-) {
+) implements Serializable {
 }
