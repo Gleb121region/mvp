@@ -15,7 +15,7 @@ public class TokenCleanupScheduler {
         this.tokenRepository = tokenRepository;
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(fixedRateString = "${milliseconds.in.month}")
     @Modifying
     @Transactional
     public void cleanupExpiredTokens() {
