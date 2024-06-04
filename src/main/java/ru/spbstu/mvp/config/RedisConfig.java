@@ -1,4 +1,4 @@
-package com.javatechie.redis.config;
+package ru.spbstu.mvp.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -42,5 +42,4 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template;
     }
-
 }
