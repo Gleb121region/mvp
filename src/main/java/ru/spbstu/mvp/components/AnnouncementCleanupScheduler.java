@@ -14,14 +14,10 @@ import java.time.ZoneOffset;
 @Component
 @RequiredArgsConstructor
 public class AnnouncementCleanupScheduler {
-
-    private final int SECONDS_PER_MINUTE = 60;
-    private final int MILLISECONDS_PER_SECOND = 1000;
-
     private final AnnouncementRepository announcementRepository;
 
     @Transactional
-    @Scheduled(fixedRate = SECONDS_PER_MINUTE * MILLISECONDS_PER_SECOND)
+    @Scheduled(fixedRateString = "${milliseconds.in.minute}")
     @Async
     public void scheduledHideOfAnnouncement() {
         int ONE_MONTH_AGO = 1;

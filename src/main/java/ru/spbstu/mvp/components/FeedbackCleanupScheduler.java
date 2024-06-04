@@ -16,11 +16,8 @@ import java.time.ZoneOffset;
 public class FeedbackCleanupScheduler {
     private final FeedbackRepository feedbackRepository;
 
-    private final int SECONDS_PER_MINUTE = 60;
-    private final int MILLISECONDS_PER_SECOND = 1000;
-
     @Transactional
-    @Scheduled(fixedRate = SECONDS_PER_MINUTE * MILLISECONDS_PER_SECOND)
+    @Scheduled(fixedRateString = "${milliseconds.in.minute}")
     @Async
     public void scheduledRestorationOfAnnouncements() {
         int TWO_WEEK_AGO = 2;

@@ -6,6 +6,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -173,6 +174,7 @@ public class AnnouncementService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "announcements", key = "#request")
     public Set<AnnouncementResponse> getAnnouncementsInfo(@Valid AnnouncementRequest request, Integer limit, Integer offset, Principal connectedUser) {
         int offsetValue = offset != null ? offset : 0;
 
@@ -197,6 +199,7 @@ public class AnnouncementService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "announcements", key = "#announcementId")
     public AnnouncementWithDescriptionResponse getAnnouncementInfo(int announcementId, Principal connectedUser) {
         return announcementRepository.findByIdWithPhotos(announcementId).map(it ->
         {
